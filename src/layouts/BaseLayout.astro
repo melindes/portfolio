@@ -1,0 +1,39 @@
+---
+import '../styles/fonts.css';
+import '../styles/tokens.css';
+import '../styles/global.css';
+
+interface Props {
+  lang: 'fr' | 'en';
+  title: string;
+  description?: string;
+  /** Thème par défaut de l'univers ; 'split' = accueil (héros coupé blanc/noir). */
+  theme: 'clair' | 'sombre' | 'split';
+}
+
+const { lang, title, description, theme } = Astro.props;
+const themeDefaut = theme === 'split' ? 'clair' : theme;
+---
+<!doctype html>
+<html lang={lang} data-theme={themeDefaut} data-theme-defaut={themeDefaut} data-split={theme === 'split' ? '' : undefined}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script is:inline>
+      (function () {
+        var d = document.documentElement, s = null;
+        try { s = localStorage.getItem('theme'); } catch (e) {}
+        d.dataset.theme = s === 'clair' || s === 'sombre' ? s : d.dataset.themeDefaut;
+      })();
+    </script>
+    <slot name="head" />
+  </head>
+  <body>
+    <slot name="header" />
+    <slot />
+    <slot name="footer" />
+  </body>
+</html>

@@ -15,6 +15,10 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@fontsource/allura": "^5.3.0",
+    "@fontsource/cormorant-garamond": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
     "astro": "^7.4.2"
   },
   "devDependencies": {

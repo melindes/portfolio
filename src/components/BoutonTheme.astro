@@ -1,0 +1,50 @@
+---
+interface Props {
+  labelClair: string;
+  labelSombre: string;
+}
+const { labelClair, labelSombre } = Astro.props;
+---
+<button type="button" class="bouton-theme" data-label-clair={labelClair} data-label-sombre={labelSombre} aria-label={labelClair}>
+  <span class="icone-clair" aria-hidden="true">☀</span>
+  <span class="icone-sombre" aria-hidden="true">☾</span>
+</button>
+
+<style>
+  .bouton-theme {
+    width: 38px; height: 38px; border-radius: 50%;
+    border: 1px solid var(--border); background: transparent; color: var(--fg);
+    font-size: 17px; cursor: pointer; display: inline-grid; place-items: center;
+  }
+  .bouton-theme:hover { border-color: var(--accent); color: var(--accent); }
+  :global([data-theme='clair']) .icone-clair,
+  :global([data-theme='sombre']) .icone-sombre { display: none; }
+</style>
+
+<script>
+  import { THEME_KEY, writeStored } from '../lib/theme';
+
+  function majLibelle(bouton: HTMLButtonElement) {
+    const actuel = document.documentElement.dataset.theme;
+    bouton.setAttribute('aria-label', (actuel === 'sombre' ? bouton.dataset.labelClair : bouton.dataset.labelSombre) ?? '');
+  }
+
+  function init() {
+    document.querySelectorAll<HTMLButtonElement>('.bouton-theme').forEach((bouton) => {
+      majLibelle(bouton);
+      if (bouton.dataset.pret) return;
+      bouton.dataset.pret = '1';
+      bouton.addEventListener('click', () => {
+        const suivant = document.documentElement.dataset.theme === 'sombre' ? 'clair' : 'sombre';
+        document.documentElement.dataset.theme = suivant;
+        let stockage: Storage | undefined;
+        try { stockage = window.localStorage; } catch { stockage = undefined; }
+        writeStored(stockage, THEME_KEY, suivant);
+        majLibelle(bouton);
+      });
+    });
+  }
+
+  init();
+  document.addEventListener('astro:page-load', init);
+</script>

@@ -1,0 +1,32 @@
+/* Jetons fixes : la palette « noir et blanc éditorial » et l'accent or. */
+:root {
+  --paper: #fafafa;
+  --ink: #111111;
+  --text-on-dark: #e9e6e0;
+  --gold-on-dark: #d9b45a;
+  --gold-on-light: #7d5e12;
+  --radius: 10px;
+  --max: 1080px;
+  --ease-porte: cubic-bezier(.7, 0, .2, 1);
+}
+
+/* Jetons qui suivent le mode choisi. */
+:root[data-theme='clair'] {
+  --bg: var(--paper);
+  --fg: var(--ink);
+  --muted: #5f5f5f;
+  --accent: var(--gold-on-light);
+  --border: #dedede;
+  --surface: #ffffff;
+  color-scheme: light;
+}
+
+:root[data-theme='sombre'] {
+  --bg: var(--ink);
+  --fg: var(--text-on-dark);
+  --muted: #a8a8a8;
+  --accent: var(--gold-on-dark);
+  --border: #2c2c2c;
+  --surface: #191919;
+  color-scheme: dark;
+}
