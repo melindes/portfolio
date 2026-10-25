@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import BandeauSection from '../components/BandeauSection.astro';
 import CeQueJeFais from '../components/CeQueJeFais.astro';
 import CarteProjet from '../components/CarteProjet.astro';
-import { listLocalized, getCompetences } from '../lib/content';
+import { listLocalized, getCompetences, getAccueil } from '../lib/content';
 import { localizedPath, useTranslations, type Lang } from '../lib/i18n';
 
 interface Props { lang: Lang }
@@ -11,6 +11,7 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const projets = await listLocalized('projets', lang);
 const { technos } = await getCompetences();
+const { diplome } = await getAccueil(lang);
 ---
 <BaseLayout lang={lang} title={t('code.titre')} theme="clair" univers="code">
   <main>
@@ -27,6 +28,7 @@ const { technos } = await getCompetences();
 
       <section class="competences" aria-labelledby="titre-competences" data-reveal>
         <h2 id="titre-competences">{t('code.competences')}</h2>
+        <p class="formation"><strong>{t('code.formation')} :</strong> {diplome}</p>
         <ul class="font-code">{technos.map((x) => <li>{x}</li>)}</ul>
       </section>
 
@@ -40,5 +42,6 @@ const { technos } = await getCompetences();
   .grille { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); }
   .competences ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
   .competences li { font-size: 13px; padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; }
+  .formation { margin: 0 0 14px; }
   .contact { margin-top: 36px; }
 </style>
