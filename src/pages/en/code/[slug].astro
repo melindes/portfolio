@@ -1,0 +1,13 @@
+---
+import { getCollection } from 'astro:content';
+import ProjetFiche from '../../../views/ProjetFiche.astro';
+import { slugOf } from '../../../lib/content';
+
+export async function getStaticPaths() {
+  const projets = await getCollection('projets', (e) => e.id.startsWith('fr/') && e.data.publie !== false);
+  return projets.map((e) => ({ params: { slug: slugOf(e.id) } }));
+}
+
+const { slug } = Astro.params;
+---
+<ProjetFiche lang="en" slug={slug} />

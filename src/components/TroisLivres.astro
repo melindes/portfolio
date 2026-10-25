@@ -1,0 +1,51 @@
+---
+import { inkLevel } from '../lib/ink';
+import { useTranslations, type Lang } from '../lib/i18n';
+
+interface Partie { titre: string; chapitres_ecrits: number; chapitres_total: number; pages?: number; en_cours?: number }
+interface Props { parties: Partie[]; lang: Lang }
+const { parties, lang } = Astro.props;
+const t = useTranslations(lang);
+
+function legende(p: Partie): string {
+  const morceaux = [`${p.chapitres_ecrits}/${p.chapitres_total} ${t('roman.chapitres')}`];
+  if (p.pages) morceaux.push(t('roman.pages').replace('{n}', String(p.pages)));
+  if (p.en_cours) morceaux.push(t('roman.chapitreEnCours').replace('{n}', String(p.en_cours)));
+  return morceaux.join(' · ');
+}
+---
+<ol class="trois-livres" data-reveal>
+  {parties.map((p) => {
+    const niveau = inkLevel(p.chapitres_ecrits, p.chapitres_total);
+    return (
+      <li class:list={['livre', { 'livre--vide': niveau === 0 }]} data-niveau={String(niveau)} style={`--niveau: ${niveau}%`}>
+        <span class="encre" aria-hidden="true"></span>
+        {p.en_cours && <span class="plume" aria-hidden="true"></span>}
+        <span class="titre font-titre">{p.titre}</span>
+        <span class="legende">{legende(p)}</span>
+      </li>
+    );
+  })}
+</ol>
+
+<style>
+  .trois-livres { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 18px; }
+  .livre {
+    position: relative; width: 150px; height: 200px; overflow: hidden; border-radius: 2px 8px 8px 2px;
+    border: 1px solid var(--border); background: var(--surface);
+    display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 12px;
+  }
+  .livre--vide { border-style: dashed; background: transparent; }
+  .encre {
+    position: absolute; left: 0; right: 0; bottom: 0; height: var(--niveau);
+    background: var(--roman, var(--accent)); transition: height 1.4s cubic-bezier(.3, .7, .2, 1);
+  }
+  :global(.js-reveal) .trois-livres:not(.is-visible) .encre { height: 0; }
+  .plume {
+    position: absolute; right: 14px; bottom: var(--niveau); width: 3px; height: 22px; border-radius: 2px;
+    background: var(--gold-on-dark); box-shadow: 0 0 8px var(--gold-on-dark); transform: rotate(-14deg);
+  }
+  .titre, .legende { position: relative; color: #fff; background: rgb(0 0 0 / .55); border-radius: 6px; padding: 2px 8px; }
+  .titre { font-size: 22px; font-style: italic; font-weight: 600; }
+  .legende { font-size: 11px; margin-top: 6px; line-height: 1.4; }
+</style>

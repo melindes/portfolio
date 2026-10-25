@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroRelais from '../components/HeroRelais.astro';
+import QuiSuisJe from '../components/QuiSuisJe.astro';
+import { getAccueil } from '../lib/content';
+import type { Lang } from '../lib/i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const accueil = await getAccueil(lang);
+---
+<BaseLayout lang={lang} theme="split">
+  <main>
+    <h1 class="sr-only">{accueil.nom} — Melindes · Bindjé</h1>
+    <HeroRelais lang={lang} sousTitreMelindes={accueil.sous_titre_melindes} sousTitreBindje={accueil.sous_titre_bindje} />
+    <QuiSuisJe lang={lang} nom={accueil.nom} diplome={accueil.diplome} paragraphes={accueil.paragraphes} />
+  </main>
+</BaseLayout>

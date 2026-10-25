@@ -1,0 +1,16 @@
+---
+import { alternatePath, otherLang, useTranslations, type Lang } from '../lib/i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<a class="langue" href={alternatePath(Astro.url.pathname)} hreflang={otherLang(lang)} lang={otherLang(lang)} title={t('nav.autreLangueNom')}>{t('nav.autreLangue')}</a>
+
+<style>
+  .langue {
+    font: 13px 'JetBrains Mono', monospace; color: var(--fg); text-decoration: none;
+    padding: 6px 8px; border-radius: 6px;
+  }
+  .langue:hover { color: var(--accent); }
+</style>

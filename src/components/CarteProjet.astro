@@ -1,0 +1,29 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { localizedPath, type Lang } from '../lib/i18n';
+import { slugOf } from '../lib/content';
+
+interface Props { entry: CollectionEntry<'projets'>; lang: Lang }
+const { entry, lang } = Astro.props;
+const d = entry.data;
+---
+<a class="carte-projet" href={localizedPath('projet', lang, slugOf(entry.id))} data-reveal style={d.couleur ? `--projet: ${d.couleur.accent}` : undefined}>
+  <span class="etat">{d.badge_texte}</span>
+  <span class="titre">{d.titre}</span>
+  {d.resume_carte && <span class="resume">{d.resume_carte}</span>}
+  <span class="technos font-code">{d.technos.slice(0, 4).join(' · ')}</span>
+</a>
+
+<style>
+  .carte-projet {
+    display: grid; gap: 8px; align-content: start; padding: 22px; border-radius: var(--radius);
+    border: 1px solid var(--border); border-top: 4px solid var(--projet, var(--accent));
+    background: var(--surface); color: var(--fg); text-decoration: none;
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .carte-projet:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgb(0 0 0 / .08); }
+  .etat { font-size: 12px; color: var(--muted); }
+  .titre { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 28px; line-height: 1.1; }
+  .resume { font-size: 15px; }
+  .technos { font-size: 12px; color: var(--muted); }
+</style>

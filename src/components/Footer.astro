@@ -1,0 +1,27 @@
+---
+import { localizedPath, useTranslations, type Lang } from '../lib/i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<footer class="pied">
+  <div class="conteneur ligne">
+    <p class="font-titre">{t('footer.texte')}</p>
+    <p class="liens">
+      <a href={localizedPath('code', lang)}>{t('nav.code')}</a>
+      <a href={localizedPath('ecriture', lang)}>{t('nav.ecriture')}</a>
+      <a href={localizedPath('contact', lang)}>{t('nav.contact')}</a>
+    </p>
+    <p class="copy">© {new Date().getFullYear()} Mandah Célestin Wilfried Bindjé</p>
+  </div>
+</footer>
+
+<style>
+  .pied { border-top: 1px solid var(--border); margin-top: 64px; padding-block: 24px; color: var(--muted); font-size: 14px; }
+  .ligne { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline; justify-content: space-between; }
+  .ligne p { margin: 0; }
+  .font-titre { font-size: 19px; font-style: italic; color: var(--fg); }
+  .liens { display: flex; gap: 16px; flex-wrap: wrap; }
+  .liens a { color: var(--muted); }
+</style>

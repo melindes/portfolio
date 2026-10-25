@@ -1,0 +1,113 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NoteTraduction from '../components/NoteTraduction.astro';
+import { getLocalized } from '../lib/content';
+import { localizedPath, useTranslations, type Lang } from '../lib/i18n';
+
+interface Props { lang: Lang; slug: string }
+const { lang, slug } = Astro.props;
+const t = useTranslations(lang);
+const fiche = await getLocalized('projets', slug, lang);
+if (!fiche) throw new Error(`Projet introuvable : ${slug}`);
+const d = fiche.entry.data;
+const prevenir = `${localizedPath('contact', lang)}?motif=my-life`;
+const bientot = d.statut === 'bientot';
+const disponible = d.statut === 'disponible' && d.lien_play_store;
+const style = d.couleur
+  ? `--projet-debut: ${d.couleur.fond_debut}; --projet-fin: ${d.couleur.fond_fin}; --projet-accent: ${d.couleur.accent};`
+  : undefined;
+---
+<BaseLayout lang={lang} title={d.titre} description={d.slogan ?? d.probleme} theme="clair" univers="code">
+  <main class="fiche-projet" style={style} lang={fiche.isFallback ? 'fr' : undefined}>
+    {fiche.isFallback && <NoteTraduction lang={lang} />}
+    <nav class="conteneur fil font-code" aria-label="Fil d’Ariane"><a href={localizedPath('code', lang)}>code</a> / {slug}</nav>
+
+    <section class="conteneur entete-projet">
+      <div class="texte">
+        {d.badge_texte && <span class="etat">{d.badge_texte}</span>}
+        <h1>{d.titre}</h1>
+        {d.slogan && <p class="slogan">{d.slogan}</p>}
+        <p class="boutons">
+          {disponible
+            ? <a class="play" href={d.lien_play_store}>▶ {t('projet.dispoPlay')}</a>
+            : bientot && <span class="play">▶ {t('projet.bientotPlay')}</span>}
+          {bientot && <a class="bouton prevenir" href={prevenir}>{t('projet.etrePrevenu')}</a>}
+          {d.lien_github && <a class="bouton prevenir" href={d.lien_github}>{t('projet.voirDepot')}</a>}
+        </p>
+      </div>
+      {d.capture_principale && (
+        <Image class="telephone" src={d.capture_principale} alt="" widths={[200, 400]} sizes="200px" loading="eager" />
+      )}
+    </section>
+
+    <div class="conteneur">
+      <section class="bloc" data-reveal><h2>{t('projet.probleme')}</h2><p>{d.probleme}</p></section>
+      <section class="bloc" data-reveal><h2>{t('projet.solution')}</h2><p>{d.solution}</p></section>
+
+      {d.fonctionnalites.length > 0 && (
+        <section class="fonctionnalites" aria-label={t('projet.fonctionnalites')}>
+          {d.fonctionnalites.map((f) => (
+            <article class="fonctionnalite" data-reveal>
+              <Image src={f.capture} alt={f.titre} widths={[160, 320]} sizes="160px" loading="lazy" />
+              <div><h3>{f.titre}</h3><p>{f.texte}</p></div>
+            </article>
+          ))}
+        </section>
+      )}
+
+      <section class="bloc" data-reveal>
+        <h2>{t('projet.sousLeCapot')}</h2>
+        <ul class="technos font-code">{d.technos.map((x) => <li>{x}</li>)}</ul>
+      </section>
+
+      {d.credits && d.credits.length > 0 && (
+        <section class="bloc"><h2>{t('projet.credits')}</h2>
+          <ul>{d.credits.map((c) => <li>{c.lien ? <a href={c.lien}>{c.nom}</a> : c.nom}</li>)}</ul>
+        </section>
+      )}
+
+      {bientot && (
+        <section class="appel-final" data-reveal>
+          <div><strong>{d.titre} — {t('projet.ctaTitre')}</strong><br /><span>{t('projet.ctaTexte')}</span></div>
+          <a class="bouton" href={prevenir}>{t('projet.ctaBouton')}</a>
+        </section>
+      )}
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .fil { font-size: 12px; color: var(--muted); padding-top: 18px; }
+  .fil a { color: var(--muted); }
+  .entete-projet {
+    display: flex; align-items: center; gap: 28px; margin-top: 14px; padding: 32px; border-radius: 14px;
+    background: linear-gradient(160deg, var(--projet-debut, #222), var(--projet-fin, #111)); color: #f3efe8;
+  }
+  .texte { flex: 1; min-width: 0; }
+  .etat { display: inline-block; font-size: 12px; padding: 4px 10px; border-radius: 12px; background: rgb(255 255 255 / .12); }
+  h1 { margin: 12px 0 4px; font-size: clamp(38px, 6vw, 52px); }
+  .slogan { font: italic 21px/1.4 'Cormorant Garamond', Georgia, serif; margin: 0 0 18px; opacity: .9; }
+  .boutons { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; }
+  .play { background: #f3efe8; color: #0b1c16; padding: 9px 16px; border-radius: 999px; font-size: 14px; font-weight: 600; text-decoration: none; }
+  .prevenir { border-color: var(--gold-on-dark); color: var(--gold-on-dark); }
+  .telephone { width: 190px; flex: none; border-radius: 22px; border: 5px solid #222; box-shadow: 0 12px 30px rgb(0 0 0 / .35); }
+  h2 { font-size: 28px; margin: 36px 0 8px; }
+  .bloc p { max-width: 680px; margin: 0; }
+  .fonctionnalite { display: flex; align-items: center; gap: 28px; padding-block: 22px; border-bottom: 1px solid var(--border); }
+  .fonctionnalite:nth-child(even) { flex-direction: row-reverse; }
+  .fonctionnalite img { width: 140px; flex: none; border-radius: 16px; border: 4px solid #222; }
+  .fonctionnalite h3 { margin: 0 0 6px; font-size: 24px; color: var(--projet-accent-texte, var(--fg)); }
+  .fonctionnalite p { margin: 0; }
+  .technos { list-style: none; padding: 0; margin: 10px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .technos li { font-size: 12px; padding: 5px 10px; border: 1px solid var(--border); border-radius: 6px; }
+  .appel-final {
+    margin-top: 40px; padding: 22px; border-radius: var(--radius); border: 1px dashed var(--accent);
+    display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between;
+  }
+  @media (max-width: 719px) {
+    .entete-projet { flex-direction: column; align-items: stretch; padding: 22px; }
+    .telephone { align-self: center; width: 170px; }
+    .fonctionnalite, .fonctionnalite:nth-child(even) { flex-direction: column; align-items: flex-start; }
+  }
+</style>

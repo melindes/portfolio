@@ -1,0 +1,38 @@
+activites:
+  - univers: code
+    nom_fr: Apps
+    nom_en: Apps
+    badge: realise
+    preuve_fr: My Life (Flutter, Supabase)
+    preuve_en: My Life (Flutter, Supabase)
+  - univers: code
+    nom_fr: Sites web
+    nom_en: Websites
+    badge: realise
+    preuve_fr: Ce portfolio
+    preuve_en: This portfolio
+  - univers: code
+    nom_fr: Design
+    nom_en: Design
+    badge: en-cours
+    preuve_fr: En apprentissage — design de ce site, écrans de My Life, maquettes des fiches romans
+    preuve_en: Learning — this site’s design, the My Life screens, the novel page mockups
+  - univers: ecriture
+    nom_fr: Romans
+    nom_en: Novels
+    badge: en-cours
+    preuve_fr: Les larmes du présent (partie 1 terminée) et trois romans à venir
+    preuve_en: Les larmes du présent (part 1 complete) and three upcoming novels
+  - univers: ecriture
+    nom_fr: BD
+    nom_en: Comics
+    badge: en-cours
+    preuve_fr: En apprentissage — découpage des premiers chapitres en cours
+    preuve_en: Learning — storyboarding the first chapters
+  - univers: ecriture
+    nom_fr: Animation
+    nom_en: Animation
+    badge: a-venir
+    preuve_fr: Un objectif à long terme
+    preuve_en: A long-term goal
+technos: [Flutter, Dart, Supabase, Java, HTML/CSS/JS, Astro, Git]

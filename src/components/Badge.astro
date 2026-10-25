@@ -1,0 +1,18 @@
+---
+import { useTranslations, type Lang } from '../lib/i18n';
+
+export type Etat = 'realise' | 'en-cours' | 'a-venir';
+interface Props { etat: Etat; lang: Lang; label?: string }
+const { etat, lang, label } = Astro.props;
+const t = useTranslations(lang);
+---
+<span class={`badge badge--${etat}`}>{label ?? t(`badge.${etat}`)}</span>
+
+<style>
+  .badge {
+    display: inline-block; font-size: 12px; line-height: 1.4; padding: 3px 10px;
+    border-radius: 999px; border: 1px solid var(--border); color: var(--fg); white-space: nowrap;
+  }
+  .badge--realise { border-color: var(--accent); }
+  .badge--a-venir { color: var(--muted); border-style: dashed; }
+</style>

@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { localizedPath, useTranslations } from '../lib/i18n';
+
+const fr = useTranslations('fr');
+const en = useTranslations('en');
+---
+<BaseLayout lang="fr" title={`${fr('nf.titre')} · ${en('nf.titre')}`} theme="clair">
+  <main class="conteneur introuvable">
+    <p class="code font-code">404</p>
+    <h1>{fr('nf.titre')} · <span lang="en">{en('nf.titre')}</span></h1>
+    <p>{fr('nf.texte')}</p>
+    <div class="portes">
+      <a class="porte porte--code" href={localizedPath('code', 'fr')}><span class="font-code">Melindes</span> — {fr('nav.code')}</a>
+      <a class="porte porte--ecriture" href={localizedPath('ecriture', 'fr')}><span class="font-signature">Bindjé</span> — {fr('nav.ecriture')}</a>
+    </div>
+    <p class="en" lang="en">
+      <a href={localizedPath('code', 'en')}>{en('nav.code')}</a> · <a href={localizedPath('ecriture', 'en')}>{en('nav.ecriture')}</a> · <a href={localizedPath('home', 'en')}>{en('nav.accueil')}</a>
+    </p>
+  </main>
+</BaseLayout>
+
+<style>
+  .introuvable { padding-block: 64px; text-align: center; }
+  .code { font-size: 48px; margin: 0; color: var(--accent); }
+  h1 { font-size: clamp(30px, 6vw, 44px); margin: 8px 0 12px; }
+  .portes { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin: 28px 0; }
+  .porte { min-width: min(100%, 240px); padding: 22px; border-radius: var(--radius); text-decoration: none; font-size: 15px; }
+  .porte--code { background: var(--paper); color: var(--ink); border: 1px solid #dedede; }
+  .porte--ecriture { background: var(--ink); color: var(--text-on-dark); }
+  .porte .font-signature { font-size: 28px; }
+</style>

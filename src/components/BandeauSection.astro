@@ -1,0 +1,22 @@
+---
+// Bande d'en-tête d'une section : c'est elle que la moitié cliquée de l'accueil « devient »
+// (même transition:name que la porte correspondante).
+interface Props { univers: 'code' | 'ecriture'; titre: string; intro?: string }
+const { univers, titre, intro } = Astro.props;
+---
+<header class={`bandeau-section bandeau--${univers}`} transition:name={`porte-${univers}`}>
+  <div class="conteneur">
+    <h1 class={univers === 'code' ? 'font-code' : 'font-signature'}>{titre}</h1>
+    {intro && <p>{intro}</p>}
+  </div>
+</header>
+
+<style>
+  .bandeau-section { padding-block: 40px 32px; }
+  .bandeau--code { background: var(--paper); color: var(--ink); border-bottom: 1px solid #e4e4e4; }
+  .bandeau--ecriture { background: var(--ink); color: var(--text-on-dark); border-bottom: 1px solid #2c2c2c; }
+  h1 { margin: 0; font-weight: 400; line-height: 1.1; }
+  .font-code { font-size: clamp(32px, 5vw, 48px); }
+  .font-signature { font-size: clamp(48px, 8vw, 76px); }
+  p { margin: 10px 0 0; max-width: 640px; opacity: .8; }
+</style>

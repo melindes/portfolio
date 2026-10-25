@@ -1,0 +1,119 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Badge from '../components/Badge.astro';
+import NoteTraduction from '../components/NoteTraduction.astro';
+import TroisLivres from '../components/TroisLivres.astro';
+import { getLocalized } from '../lib/content';
+import { withSourceProgress } from '../lib/ink';
+import { localizedPath, useTranslations, type Lang } from '../lib/i18n';
+
+interface Props { lang: Lang; slug: string }
+const { lang, slug } = Astro.props;
+const t = useTranslations(lang);
+const fiche = await getLocalized('romans', slug, lang);
+if (!fiche) throw new Error(`Roman introuvable : ${slug}`);
+const d = fiche.entry.data;
+const source = lang !== 'fr' && !fiche.isFallback ? (await getLocalized('romans', slug, 'fr'))?.entry.data.parties : undefined;
+const parties = withSourceProgress(d.parties, source);
+const contact = (motif: string) => `${localizedPath('contact', lang)}?motif=${motif}&oeuvre=${slug}`;
+const ROLES = [
+  { cle: 'beta', motif: 'beta-lecture' },
+  { cle: 'dessin', motif: 'dessin-bd' },
+  { cle: 'voix', motif: 'voix' },
+  { cle: 'soutien', motif: 'soutien' },
+];
+const style = d.couleur ? `--roman-clair: ${d.couleur.clair}; --roman-sombre: ${d.couleur.sombre}` : undefined;
+---
+<BaseLayout lang={lang} title={d.titre} description={d.resume} theme="sombre" univers="ecriture">
+  <main class="fiche-roman" style={style} lang={fiche.isFallback ? 'fr' : undefined}>
+    {fiche.isFallback && <NoteTraduction lang={lang} />}
+    <nav class="conteneur fil" aria-label="Fil d’Ariane"><a href={localizedPath('ecriture', lang)}>{t('nav.ecriture')}</a> / {d.titre}</nav>
+
+    <section class="conteneur entete-roman">
+      {d.couverture && (
+        <Image class="couverture" src={d.couverture} alt={`${t('roman.couvertureAlt')} — ${d.titre}`} widths={[200, 400]} sizes="200px" loading="eager" />
+      )}
+      <div>
+        <span class="etat">{d.statut === 'phare' ? t('roman.projetPhare') : t('roman.aVenir')}</span>
+        <h1>{d.titre}</h1>
+        {lang === 'en' && d.sous_titre_en && <p class="sous-titre">{d.sous_titre_en}</p>}
+        {(d.genres.length > 0 || d.lieu) && <p class="meta">{[...d.genres, d.lieu].filter(Boolean).join(' · ')}</p>}
+        {d.resume && <p class="resume">{d.resume}</p>}
+        {d.statut === 'a-venir' && <p><a class="bouton" href={contact('soutien')}>{t('roman.etrePrevenu')}</a></p>}
+      </div>
+    </section>
+
+    <div class="conteneur">
+      {d.extrait && (
+        <section data-reveal>
+          <h2>{t('roman.extrait')}</h2>
+          <blockquote class="extrait">{d.extrait.split('\n').map((ligne) => <p>{ligne}</p>)}</blockquote>
+        </section>
+      )}
+
+      {d.parties.length > 0 && (
+        <section>
+          <h2>{t('roman.ouEnEst')}</h2>
+          <TroisLivres parties={parties} lang={lang} />
+        </section>
+      )}
+
+      {d.au_dela.length > 0 && (
+        <section data-reveal>
+          <h2>{t('roman.auDela')}</h2>
+          <ul class="tuiles">
+            {d.au_dela.map((a) => (
+              <li><span class="nom font-titre">{a.nom}</span><Badge etat={a.badge} lang={lang} /><span class="txt">{a.texte}</span></li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {d.statut === 'phare' && (
+        <>
+          <section id="rejoindre" data-reveal>
+            <h2>{t('roman.rejoindre')}</h2>
+            <ul class="tuiles rejoindre">
+              {ROLES.map((r) => (
+                <li>
+                  <span class="nom font-titre">{t(`roman.${r.cle}.titre`)}</span>
+                  <span class="txt">{t(`roman.${r.cle}.texte`)}</span>
+                  <a class="bouton" href={contact(r.motif)}>{t(`roman.${r.cle}.bouton`)}</a>
+                </li>
+              ))}
+            </ul>
+          </section>
+          <p class="fin"><a class="bouton bouton--plein" href={localizedPath('contact', lang)}>{t('roman.meContacter')}</a></p>
+        </>
+      )}
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  :global([data-theme='sombre']) .fiche-roman { --roman: var(--roman-sombre, var(--accent)); }
+  :global([data-theme='clair']) .fiche-roman { --roman: var(--roman-clair, var(--accent)); }
+  .fil { font-size: 12px; color: var(--muted); padding-top: 18px; }
+  .fil a { color: var(--muted); }
+  .entete-roman { display: flex; gap: 34px; align-items: center; padding-block: 24px 8px; }
+  .couverture { width: 200px; flex: none; border-radius: 4px; box-shadow: 0 14px 40px rgb(0 0 0 / .35); }
+  .etat { display: inline-block; font-size: 12px; padding: 3px 10px; border-radius: 12px; border: 1px solid var(--roman); color: var(--roman); }
+  h1 { margin: 12px 0 0; font-size: clamp(38px, 6vw, 56px); color: var(--roman); line-height: 1.05; }
+  .sous-titre { font: italic 21px 'Cormorant Garamond', Georgia, serif; margin: 6px 0 0; color: var(--muted); }
+  .meta { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin: 12px 0 16px; }
+  .resume { max-width: 620px; line-height: 1.75; margin: 0; }
+  h2 { font-size: 30px; margin: 44px 0 14px; }
+  .extrait { margin: 0; padding: 6px 0 6px 22px; border-left: 2px solid var(--roman); font: italic 21px/1.6 'Cormorant Garamond', Georgia, serif; max-width: 720px; }
+  .extrait p { margin: 0 0 8px; }
+  .tuiles { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+  .tuiles li { display: grid; gap: 8px; align-content: start; justify-items: start; padding: 16px; border: 1px solid var(--border); border-radius: var(--radius); }
+  .nom { font-size: 21px; font-weight: 600; }
+  .txt { font-size: 14px; color: var(--muted); }
+  .rejoindre li { border-color: color-mix(in srgb, var(--accent) 35%, var(--border)); }
+  .fin { text-align: center; margin-top: 40px; }
+  @media (max-width: 640px) {
+    .entete-roman { flex-direction: column; align-items: flex-start; }
+    .couverture { width: 170px; }
+  }
+</style>
