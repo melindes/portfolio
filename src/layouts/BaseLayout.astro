@@ -2,26 +2,36 @@
 import '../styles/fonts.css';
 import '../styles/tokens.css';
 import '../styles/global.css';
+import Header, { type Univers } from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { alternatePath, otherLang, useTranslations, type Lang } from '../lib/i18n';
 
 interface Props {
-  lang: 'fr' | 'en';
-  title: string;
+  lang: Lang;
+  title?: string;
   description?: string;
   /** Thème par défaut de l'univers ; 'split' = accueil (héros coupé blanc/noir). */
   theme: 'clair' | 'sombre' | 'split';
+  univers?: Univers;
 }
 
-const { lang, title, description, theme } = Astro.props;
+const { lang, title, description, theme, univers = 'neutre' } = Astro.props;
+const t = useTranslations(lang);
 const themeDefaut = theme === 'split' ? 'clair' : theme;
+const titreComplet = title ? `${title} · ${t('site.titre')}` : t('site.titre');
+const ici = Astro.url.pathname;
+const ailleurs = alternatePath(ici);
 ---
 <!doctype html>
 <html lang={lang} data-theme={themeDefaut} data-theme-defaut={themeDefaut} data-split={theme === 'split' ? '' : undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    {description && <meta name="description" content={description} />}
+    <title>{titreComplet}</title>
+    <meta name="description" content={description ?? t('site.description')} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" hreflang={lang} href={ici} />
+    <link rel="alternate" hreflang={otherLang(lang)} href={ailleurs} />
     <script is:inline>
       (function () {
         var d = document.documentElement, s = null;
@@ -32,8 +42,8 @@ const themeDefaut = theme === 'split' ? 'clair' : theme;
     <slot name="head" />
   </head>
   <body>
-    <slot name="header" />
+    <Header lang={lang} univers={univers} />
     <slot />
-    <slot name="footer" />
+    <Footer lang={lang} />
   </body>
 </html>
