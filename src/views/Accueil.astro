@@ -1,7 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import HeroRelais from '../components/HeroRelais.astro';
+import HeroAffiche from '../components/HeroAffiche.astro';
+import Recit from '../components/Recit.astro';
 import QuiSuisJe from '../components/QuiSuisJe.astro';
+import RejoindreBandeau from '../components/RejoindreBandeau.astro';
 import { getAccueil } from '../lib/content';
 import type { Lang } from '../lib/i18n';
 
@@ -11,8 +13,10 @@ const accueil = await getAccueil(lang);
 ---
 <BaseLayout lang={lang} theme="split">
   <main>
-    <h1 class="sr-only">{accueil.nom} — Melindes · Bindjé</h1>
-    <HeroRelais lang={lang} sousTitreMelindes={accueil.sous_titre_melindes} sousTitreBindje={accueil.sous_titre_bindje} />
+    <h1 class="sr-only">{accueil.nom} — Portfolio Melindes · Bindjé</h1>
+    <HeroAffiche lang={lang} sousTitreMelindes={accueil.sous_titre_melindes} sousTitreBindje={accueil.sous_titre_bindje} />
+    <Recit lang={lang} />
     <QuiSuisJe lang={lang} nom={accueil.nom} diplome={accueil.diplome} paragraphes={accueil.paragraphes} />
+    <RejoindreBandeau lang={lang} />
   </main>
 </BaseLayout>

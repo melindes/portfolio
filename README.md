@@ -14,7 +14,7 @@ Construit avec [Astro](https://astro.build), hébergé sur Cloudflare Pages.
 | `npm run preview` | Sert `dist/` en local |
 | `npm run test:unit` | Tests unitaires (Vitest) |
 | `npm run test:e2e` | Tests de bout en bout (Playwright ; arrête d'abord tout `astro preview` en cours) |
-| `npm run crop:portrait` | Recadre `assets-source/portrait/photo-originale.jpg` (fichier local, non versionné) → `src/assets/portrait.jpg` |
+| `npm run prepare:portrait` | Prépare la photo détourée `assets-source/portrait/photo-detouree.png` (fichier local, non versionné) → `src/assets/portrait-detoure.png` |
 
 Copie `.env.example` en `.env` et renseigne au moins `PUBLIC_WEB3FORMS_KEY` pour construire en local.
 
@@ -30,7 +30,7 @@ Tout le contenu est dans `src/content/`. Une erreur de saisie fait échouer la c
 - **Compétences et badges ● ◐ ○** — `src/content/site/competences.yml` (`badge: realise | en-cours | a-venir`).
 - **Textes de l'accueil** — `src/content/site/fr/accueil.yml` et `en/accueil.yml`.
 - **Textes d'interface** (menus, boutons, formulaire) — `src/i18n/ui.fr.json` et `ui.en.json`.
-- **Nouvelle photo** — remplace `assets-source/portrait/photo-originale.jpg`, ajuste la zone dans `scripts/crop-portrait.mjs` si besoin, puis `npm run crop:portrait`.
+- **Nouvelle photo** — détoure-la (fond transparent, PNG), enregistre-la sous `assets-source/portrait/photo-detouree.png`, puis `npm run prepare:portrait`.
 
 Après chaque modification : `git add`, `git commit`, `git push` → Cloudflare publie le site en ~1 minute.
 

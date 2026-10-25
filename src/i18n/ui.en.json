@@ -94,5 +94,13 @@
   "merci.retour": "Back to home",
   "nf.titre": "Page not found",
   "nf.texte": "Cette page n’existe pas · This page doesn’t exist.",
-  "footer.texte": "Melindes solves. Bindjé tells."
+  "footer.texte": "Melindes solves. Bindjé tells.",
+  "accueil.codeTitre": "Start from a real need",
+  "accueil.codeTexte": "Apps, websites and design: solutions that work, built for the people who use them.",
+  "accueil.ecritureTitre": "Pass on values",
+  "accueil.ecritureTexte": "Novels, comics and, someday, animation: stories that help people through life.",
+  "accueil.chapitresEcrits": "chapters written",
+  "accueil.rejoindreTexte": "Beta reading, drawing, voice or hiring: there is a place for you.",
+  "accueil.recruteur": "Recruiter",
+  "accueil.recruteurBouton": "Hire me →"
 }

@@ -94,5 +94,13 @@
   "merci.retour": "Retour à l’accueil",
   "nf.titre": "Page introuvable",
   "nf.texte": "Cette page n’existe pas · This page doesn’t exist.",
-  "footer.texte": "Melindes résout. Bindjé raconte."
+  "footer.texte": "Melindes résout. Bindjé raconte.",
+  "accueil.codeTitre": "Partir d’un besoin réel",
+  "accueil.codeTexte": "Apps, sites web et design : des solutions qui fonctionnent, pensées pour les gens qui s’en servent.",
+  "accueil.ecritureTitre": "Transmettre des valeurs",
+  "accueil.ecritureTexte": "Romans, BD et, demain, animation : des histoires qui aident à traverser la vie.",
+  "accueil.chapitresEcrits": "chapitres écrits",
+  "accueil.rejoindreTexte": "Bêta-lecture, dessin, voix ou recrutement : il y a une place pour toi.",
+  "accueil.recruteur": "Recruteur",
+  "accueil.recruteurBouton": "Me recruter →"
 }

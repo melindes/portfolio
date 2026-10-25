@@ -6,8 +6,10 @@
 @import '@fontsource/cormorant-garamond/latin-500-italic.css';
 @import '@fontsource/cormorant-garamond/latin-600.css';
 @import '@fontsource/allura/latin-400.css';
+@import '@fontsource/anton/latin-400.css';
 
 .font-code { font-family: 'JetBrains Mono', ui-monospace, monospace; }
 .font-titre { font-family: 'Cormorant Garamond', Georgia, serif; }
 .font-texte { font-family: Inter, system-ui, sans-serif; }
 .font-signature { font-family: Allura, cursive; }
+.font-affiche { font-family: Anton, Impact, 'Arial Narrow', sans-serif; }
