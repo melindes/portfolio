@@ -1,0 +1,11 @@
+// Déploiement Cloudflare (Workers, fichiers statiques) : le site construit par `npm run build` est servi depuis dist/.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Doit correspondre exactement au nom du projet dans le tableau de bord Cloudflare.
+  "name": "portfolio",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}
