@@ -1,0 +1,40 @@
+---
+import { localizedPath, useTranslations, type Lang } from '../lib/i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const contact = localizedPath('contact', lang);
+const roman = 'les-larmes-du-present';
+const ROLES = [
+  { titre: t('roman.beta.titre'), bouton: t('roman.beta.bouton'), href: `${contact}?motif=beta-lecture&oeuvre=${roman}` },
+  { titre: t('roman.dessin.titre'), bouton: t('roman.dessin.bouton'), href: `${contact}?motif=dessin-bd&oeuvre=${roman}` },
+  { titre: t('roman.voix.titre'), bouton: t('roman.voix.bouton'), href: `${contact}?motif=voix&oeuvre=${roman}` },
+  { titre: t('accueil.recruteur'), bouton: t('accueil.recruteurBouton'), href: `${contact}?motif=recrutement` },
+];
+---
+<section class="rejoindre-bandeau" aria-labelledby="titre-rejoindre" data-reveal>
+  <div class="conteneur">
+    <h2 id="titre-rejoindre">{t('accueil.rejoindre')}</h2>
+    <p class="intro">{t('accueil.rejoindreTexte')}</p>
+    <ul>
+      {ROLES.map((r) => (
+        <li><a href={r.href}><span class="titre">{r.titre}</span><span class="action">{r.bouton}</span></a></li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .rejoindre-bandeau { background: var(--ink); color: var(--text-on-dark); padding-block: 48px; margin-top: 48px; }
+  h2 { margin: 0; font-family: Anton, Impact, sans-serif; font-weight: 400; text-transform: uppercase; font-size: clamp(30px, 4vw, 48px); color: var(--gold-on-dark); }
+  .intro { margin: 6px 0 22px; opacity: .8; }
+  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+  a {
+    display: grid; gap: 6px; padding: 18px; border-radius: 12px; border: 1px solid #3a3222; color: var(--text-on-dark);
+    text-decoration: none; transition: border-color .25s ease, transform .25s ease;
+  }
+  a:hover { border-color: var(--gold-on-dark); transform: translateY(-3px); }
+  .titre { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 22px; }
+  .action { font-size: 14px; color: var(--gold-on-dark); }
+</style>

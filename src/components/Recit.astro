@@ -1,0 +1,77 @@
+---
+import { Image } from 'astro:assets';
+import { getLocalized } from '../lib/content';
+import { inkLevel } from '../lib/ink';
+import { localizedPath, useTranslations, type Lang } from '../lib/i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const myLife = (await getLocalized('projets', 'my-life', lang))?.entry.data;
+const roman = (await getLocalized('romans', 'les-larmes-du-present', lang))?.entry.data;
+// L'avancement fait foi dans la version française.
+const parties = (await getLocalized('romans', 'les-larmes-du-present', 'fr'))?.entry.data.parties ?? [];
+const ecrits = parties.reduce((s, p) => s + p.chapitres_ecrits, 0);
+const total = parties.reduce((s, p) => s + p.chapitres_total, 0);
+const capture = myLife?.fonctionnalites[0]?.capture;
+---
+<section class="recit">
+  <div class="col col--code" data-reveal>
+    <p class="etiquette font-code">{t('accueil.melindesResout')}</p>
+    <h2>{t('accueil.codeTitre')}</h2>
+    <p class="texte">{t('accueil.codeTexte')}</p>
+    {myLife && (
+      <a class="carte carte--my-life" href={localizedPath('projet', lang, 'my-life')}>
+        {capture && <Image src={capture} alt="" widths={[120, 240]} sizes="96px" loading="lazy" />}
+        <span class="infos">
+          <span class="titre font-titre">{myLife.titre}</span>
+          <span class="petit">{myLife.badge_texte}</span>
+          <span class="petit">{myLife.slogan}</span>
+        </span>
+      </a>
+    )}
+  </div>
+  <div class="col col--ecriture" data-reveal>
+    <p class="etiquette font-signature">{t('accueil.bindjeRaconte')}</p>
+    <h2>{t('accueil.ecritureTitre')}</h2>
+    <p class="texte">{t('accueil.ecritureTexte')}</p>
+    {roman && (
+      <a class="carte carte--roman" href={localizedPath('roman', lang, 'les-larmes-du-present')}>
+        {roman.couverture && <Image src={roman.couverture} alt="" widths={[120, 240]} sizes="96px" loading="lazy" />}
+        <span class="infos">
+          <span class="titre font-titre">{roman.titre}</span>
+          <span class="petit">{t('roman.projetPhare')}</span>
+          <span class="barre" aria-hidden="true"><span style={`width: ${inkLevel(ecrits, total)}%`}></span></span>
+          <span class="petit">{ecrits} / {total} {t('accueil.chapitresEcrits')}</span>
+        </span>
+      </a>
+    )}
+  </div>
+</section>
+
+<style>
+  .recit { display: grid; grid-template-columns: 1fr 1fr; }
+  .col { padding: clamp(36px, 6vw, 72px) clamp(16px, 5vw, 64px); display: grid; align-content: start; gap: 10px; }
+  .col--code { background: var(--paper); color: var(--ink); --or: var(--gold-on-light); }
+  .col--ecriture { background: var(--ink); color: var(--text-on-dark); --or: var(--gold-on-dark); }
+  .etiquette { margin: 0; color: var(--or); }
+  .etiquette.font-code { font-size: 14px; letter-spacing: .5px; }
+  .etiquette.font-signature { font-size: 30px; line-height: 1; }
+  h2 { margin: 0; font-family: Anton, Impact, sans-serif; font-weight: 400; font-size: clamp(30px, 4vw, 52px); line-height: 1; text-transform: uppercase; letter-spacing: .01em; }
+  .texte { margin: 0 0 10px; max-width: 460px; opacity: .85; }
+  .carte {
+    display: flex; gap: 14px; align-items: center; padding: 14px; border-radius: 12px; text-decoration: none;
+    transition: transform .25s ease, box-shadow .25s ease; max-width: 460px;
+  }
+  .carte:hover { transform: translateY(-3px); box-shadow: 0 12px 26px rgb(0 0 0 / .25); }
+  .carte img { width: 72px; height: auto; border-radius: 8px; flex: none; }
+  .carte--my-life { background: linear-gradient(160deg, #173f33, #0b1c16); color: #f3efe8; }
+  .carte--roman { background: #1c1c1c; border: 1px solid #333; color: var(--text-on-dark); }
+  .infos { display: grid; gap: 4px; min-width: 0; }
+  .titre { font-size: 22px; font-weight: 600; line-height: 1.1; }
+  .petit { font-size: 12px; opacity: .85; }
+  .barre { display: block; height: 5px; border-radius: 3px; background: #333; overflow: hidden; margin-top: 2px; }
+  .barre span { display: block; height: 100%; background: #ef5b6a; border-radius: 3px; }
+  @media (max-width: 719px) { .recit { grid-template-columns: 1fr; } }
+</style>
