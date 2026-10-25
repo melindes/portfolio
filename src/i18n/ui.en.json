@@ -14,7 +14,7 @@
   "badge.a-venir": "○ Coming",
   "traduction.bientot": "Translation coming soon",
   "accueil.voirCode": "See the code →",
-  "accueil.lireHistoires": "← Read the stories",
+  "accueil.lireHistoires": "Read the stories →",
   "accueil.melindesResout": "Melindes solves.",
   "accueil.bindjeRaconte": "Bindjé tells.",
   "accueil.deuxFacons": "Two ways to help.",
@@ -110,5 +110,6 @@
   "code.titreAffiche": "CODE",
   "ecriture.titreAffiche": "WRITING",
   "ecriture.defilant": "Psychological drama ✦ Contemporary romance ✦ New Adult ✦ Comics ✦ Audiobook ✦ Animation",
-  "ecriture.aVenirTitre": "Coming next"
+  "ecriture.aVenirTitre": "Coming next",
+  "accueil.defilant": "Melindes solves ✦ Bindjé tells ✦ Apps ✦ Websites ✦ Design ✦ Novels ✦ Comics ✦ Animation"
 }

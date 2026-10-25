@@ -3,9 +3,9 @@ import { test, expect } from '@playwright/test';
 test('récit en deux colonnes : My Life et le roman avec son avancement', async ({ page }) => {
   await page.goto('/fr/');
   const recit = page.locator('.recit');
-  await expect(recit.locator('.col--code')).toContainText('Melindes résout.');
+  await expect(recit.locator('.col--code')).toContainText('Melindes résout');
   await expect(recit.locator('.col--code').getByRole('link', { name: /My Life/ })).toHaveAttribute('href', '/fr/code/my-life');
-  await expect(recit.locator('.col--ecriture')).toContainText('Bindjé raconte.');
+  await expect(recit.locator('.col--ecriture')).toContainText('Bindjé raconte');
   await expect(recit.locator('.col--ecriture').getByRole('link', { name: /Les larmes du présent/ })).toHaveAttribute('href', '/fr/ecriture/les-larmes-du-present');
   await expect(recit.locator('.col--ecriture')).toContainText('21 / 45');
 });

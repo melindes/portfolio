@@ -26,15 +26,22 @@ test('sans sessionStorage, l’affiche se joue sans erreur', async ({ page }) =>
   expect(errors).toEqual([]);
 });
 
-test('PORTFOLIO en lettres géantes, T coupé par la frontière', async ({ browser }) => {
-  const page = await (await browser.newContext({ reducedMotion: 'reduce' })).newPage();
+test('PORT / FOLIO empilés à gauche, photo à droite (ordinateur)', async ({ browser }) => {
+  const page = await (await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 1280, height: 800 } })).newPage();
   await page.goto('/fr/');
-  await expect(page.locator('.affiche .mot')).toHaveText('PORTFOLIO');
-  const scene = await page.locator('.affiche .scene').boundingBox();
-  const t = await page.locator('.affiche .mot .t').boundingBox();
-  expect(Math.abs(t!.x + t!.width / 2 - (scene!.x + scene!.width / 2))).toBeLessThan(2);
-  const fond = await page.locator('.affiche .mot .t').evaluate((e) => getComputedStyle(e).backgroundImage);
-  expect(fond).toContain('linear-gradient');
+  await expect(page.locator('.affiche .mot .haut')).toHaveText('PORT');
+  await expect(page.locator('.affiche .mot .bas')).toHaveText('FOLIO');
+  const haut = await page.locator('.affiche .mot .haut').boundingBox();
+  const bas = await page.locator('.affiche .mot .bas').boundingBox();
+  expect(bas!.y).toBeGreaterThan(haut!.y);
+  const mot = await page.locator('.affiche .mot').boundingBox();
+  const photo = await page.locator('.affiche .photo').boundingBox();
+  expect(photo!.x).toBeGreaterThanOrEqual(mot!.x + mot!.width - 40);
+});
+
+test('bandeau doré défilant sous l’affiche', async ({ page }) => {
+  await page.goto('/fr/');
+  await expect(page.locator('.affiche + .defilant, .affiche .defilant')).toContainText('MELINDES RÉSOUT');
 });
 
 test('photo détourée avec texte alternatif', async ({ page }) => {
@@ -54,7 +61,7 @@ test('textes des portes en anglais', async ({ page }) => {
   await expect(page.locator('.porte--code')).toContainText('Melindes solves.');
   await expect(page.locator('.porte--code')).toContainText('See the code →');
   await expect(page.locator('.porte--ecriture')).toContainText('Bindjé tells.');
-  await expect(page.locator('.porte--ecriture')).toContainText('← Read the stories');
+  await expect(page.locator('.porte--ecriture')).toContainText('Read the stories →');
 });
 
 test('logo PORTFOLIO dans l’en-tête', async ({ page }) => {

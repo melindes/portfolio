@@ -14,7 +14,7 @@
   "badge.a-venir": "○ À venir",
   "traduction.bientot": "Traduction à venir",
   "accueil.voirCode": "Voir le code →",
-  "accueil.lireHistoires": "← Lire les histoires",
+  "accueil.lireHistoires": "Lire les histoires →",
   "accueil.melindesResout": "Melindes résout.",
   "accueil.bindjeRaconte": "Bindjé raconte.",
   "accueil.deuxFacons": "Deux façons d’aider.",
@@ -110,5 +110,6 @@
   "code.titreAffiche": "CODE",
   "ecriture.titreAffiche": "ÉCRITURE",
   "ecriture.defilant": "Drame psychologique ✦ Romance contemporaine ✦ New Adult ✦ Bande dessinée ✦ Livre audio ✦ Animation",
-  "ecriture.aVenirTitre": "Bientôt"
+  "ecriture.aVenirTitre": "Bientôt",
+  "accueil.defilant": "Melindes résout ✦ Bindjé raconte ✦ Apps ✦ Sites web ✦ Design ✦ Romans ✦ BD ✦ Animation"
 }
