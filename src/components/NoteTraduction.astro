@@ -1,0 +1,11 @@
+---
+import { useTranslations, type Lang } from '../lib/i18n';
+
+interface Props { lang: Lang }
+const t = useTranslations(Astro.props.lang);
+---
+<p class="note-traduction conteneur" lang={Astro.props.lang}>{t('traduction.bientot')}</p>
+
+<style>
+  .note-traduction { margin-block: 16px 0; font-size: 13px; color: var(--muted); font-style: italic; }
+</style>
