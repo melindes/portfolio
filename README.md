@@ -3,8 +3,6 @@
 Site bilingue (FR / EN) de Mandah Célestin Wilfried Bindjé : **Melindes** (code) et **Bindjé** (écriture).
 Construit avec [Astro](https://astro.build), hébergé sur Cloudflare Pages.
 
-- Spécification : [docs/superpowers/specs/2026-10-25-portfolio-v1-design.md](docs/superpowers/specs/2026-10-25-portfolio-v1-design.md)
-- Plan de construction : [docs/superpowers/plans/2026-10-25-portfolio-v1.md](docs/superpowers/plans/2026-10-25-portfolio-v1.md)
 
 ## Commandes
 
@@ -16,7 +14,7 @@ Construit avec [Astro](https://astro.build), hébergé sur Cloudflare Pages.
 | `npm run preview` | Sert `dist/` en local |
 | `npm run test:unit` | Tests unitaires (Vitest) |
 | `npm run test:e2e` | Tests de bout en bout (Playwright ; arrête d'abord tout `astro preview` en cours) |
-| `npm run crop:portrait` | Recadre `assets-source/portrait/photo-originale.jpg` → `src/assets/portrait.jpg` |
+| `npm run crop:portrait` | Recadre `assets-source/portrait/photo-originale.jpg` (fichier local, non versionné) → `src/assets/portrait.jpg` |
 
 Copie `.env.example` en `.env` et renseigne au moins `PUBLIC_WEB3FORMS_KEY` pour construire en local.
 
