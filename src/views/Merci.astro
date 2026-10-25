@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { localizedPath, useTranslations, type Lang } from '../lib/i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<BaseLayout lang={lang} title={t('merci.titre')} theme="clair">
+  <main class="conteneur merci">
+    <h1>{t('merci.titre')}</h1>
+    <p>{t('merci.texte')}</p>
+    <p><a class="bouton" href={localizedPath('home', lang)}>{t('merci.retour')}</a></p>
+  </main>
+</BaseLayout>
+
+<style>
+  .merci { padding-block: 64px; text-align: center; }
+  h1 { font-size: clamp(38px, 6vw, 54px); margin: 0 0 10px; }
+</style>

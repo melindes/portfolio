@@ -14,5 +14,6 @@ export default defineConfig({
     url: 'http://localhost:4321/',
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
+    env: { PUBLIC_WEB3FORMS_KEY: 'cle-de-test' },
   },
 });

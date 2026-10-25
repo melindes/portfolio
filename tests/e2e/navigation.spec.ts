@@ -1,10 +1,15 @@
 import { test, expect } from '@playwright/test';
 
-// Cible provisoire /fr/ → /en/ ; repassée sur /fr/contact en Task 11.
 test('le sélecteur garde la page courante', async ({ page }) => {
-  await page.goto('/fr/');
+  await page.goto('/fr/contact');
   await page.getByRole('link', { name: 'EN', exact: true }).click();
-  await expect(page).toHaveURL(/\/en\/$/);
+  await expect(page).toHaveURL(/\/en\/contact$/);
+});
+
+test('le sélecteur traduit le chemin de la section Écriture', async ({ page }) => {
+  await page.goto('/fr/ecriture/les-larmes-du-present');
+  await page.getByRole('link', { name: 'EN', exact: true }).click();
+  await expect(page).toHaveURL(/\/en\/writing\/les-larmes-du-present$/);
 });
 
 test('liens hreflang vers les deux langues', async ({ page }) => {
