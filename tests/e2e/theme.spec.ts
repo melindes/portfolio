@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
-// Page d'univers sombre par défaut (temporairement /fr/test-theme, puis /fr/ecriture en Task 10).
-const PAGE_SOMBRE = '/fr/test-theme';
+// Page d'univers sombre par défaut.
+const PAGE_SOMBRE = '/fr/ecriture';
 
 test('le choix de thème persiste après rechargement', async ({ page }) => {
   await page.goto(PAGE_SOMBRE);

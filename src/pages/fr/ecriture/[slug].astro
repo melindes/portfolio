@@ -1,0 +1,13 @@
+---
+import { getCollection } from 'astro:content';
+import RomanFiche from '../../../views/RomanFiche.astro';
+import { slugOf } from '../../../lib/content';
+
+export async function getStaticPaths() {
+  const romans = await getCollection('romans', (e) => e.id.startsWith('fr/'));
+  return romans.map((e) => ({ params: { slug: slugOf(e.id) } }));
+}
+
+const { slug } = Astro.params;
+---
+<RomanFiche lang="fr" slug={slug} />
