@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BandeauSection from '../components/BandeauSection.astro';
+import { useTranslations, type Lang } from '../lib/i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<BaseLayout lang={lang} title={t('code.titre')} theme="clair" univers="code">
+  <main>
+    <BandeauSection univers="code" titre="Melindes" intro={t('code.intro')} />
+  </main>
+</BaseLayout>

@@ -37,3 +37,22 @@ h1, h2, h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0s !important; animation-delay: 0s !important; transition-duration: 0s !important; }
 }
+
+/* « La porte s'ouvre » : la moitié cliquée de l'accueil se transforme en bandeau de section. */
+::view-transition-group(porte-code),
+::view-transition-group(porte-ecriture) {
+  animation-duration: .6s;
+  animation-timing-function: var(--ease-porte);
+}
+::view-transition-old(porte-code),
+::view-transition-old(porte-ecriture),
+::view-transition-new(porte-code),
+::view-transition-new(porte-ecriture) {
+  height: 100%;
+  object-fit: cover;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation: none !important; }
+}
