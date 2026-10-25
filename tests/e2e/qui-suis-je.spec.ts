@@ -10,13 +10,17 @@ test('récit en deux colonnes : My Life et le roman avec son avancement', async 
   await expect(recit.locator('.col--ecriture')).toContainText('21 / 45');
 });
 
-test('nom et licence sur la frontière, sans photo dans ce bloc', async ({ page }) => {
+test('nom en haut de l’affiche, sans diplôme ni bloc « Qui suis-je »', async ({ page }) => {
   await page.goto('/fr/');
-  const bloc = page.locator('.qui-suis-je');
-  await expect(bloc.locator('h2.nom')).toHaveText(/Mandah Célestin Wilfried Bindjé/);
-  await expect(bloc).toContainText('Licence MIAGE');
-  await expect(bloc).toContainText('Deux façons d’aider.');
-  await expect(bloc.locator('img')).toHaveCount(0);
+  await expect(page.locator('.affiche .identite')).toHaveText('Mandah Célestin Wilfried Bindjé');
+  await expect(page.locator('main')).not.toContainText('Licence MIAGE');
+  await expect(page.locator('.qui-suis-je')).toHaveCount(0);
+});
+
+test('la formation est sur la page Code', async ({ page }) => {
+  await page.goto('/fr/code');
+  await expect(page.locator('.competences')).toContainText('Formation');
+  await expect(page.locator('.competences')).toContainText('Licence MIAGE');
 });
 
 test('bandeau « Rejoindre l’aventure » avec les quatre motifs', async ({ page }) => {
