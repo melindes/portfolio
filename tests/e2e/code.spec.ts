@@ -35,5 +35,5 @@ test('bloc « Ce que je fais » et compétences côté code', async ({ page }) =
   await expect(bloc).toContainText('Design');
   await expect(bloc).toContainText('◐ En cours');
   await expect(page.locator('.competences')).toContainText('Flutter');
-  await expect(page.getByRole('link', { name: /recrutement/ })).toHaveAttribute('href', '/fr/contact?motif=recrutement');
+  await expect(page.getByRole('link', { name: 'Travaillons ensemble' })).toHaveAttribute('href', '/fr/contact?motif=recrutement');
 });

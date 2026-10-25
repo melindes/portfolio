@@ -2,9 +2,11 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BandeauSection from '../components/BandeauSection.astro';
+import Defilant from '../components/Defilant.astro';
 import CeQueJeFais from '../components/CeQueJeFais.astro';
 import CarteRoman from '../components/CarteRoman.astro';
-import { listLocalized, slugOf } from '../lib/content';
+import { getLocalized, listLocalized, slugOf } from '../lib/content';
+import { inkLevel } from '../lib/ink';
 import { localizedPath, useTranslations, type Lang } from '../lib/i18n';
 
 interface Props { lang: Lang }
@@ -13,50 +15,74 @@ const t = useTranslations(lang);
 const romans = await listLocalized('romans', lang);
 const phare = romans.find((r) => r.entry.data.statut === 'phare');
 const aVenir = romans.filter((r) => r.entry.data.statut === 'a-venir');
+const TEINTES = ['#5a2a10', '#3a3129', '#1f2f3d'];
+// L'avancement fait foi dans la version française.
+const parties = phare ? (await getLocalized('romans', slugOf(phare.entry.id), 'fr'))?.entry.data.parties ?? [] : [];
+const ecrits = parties.reduce((s, p) => s + p.chapitres_ecrits, 0);
+const total = parties.reduce((s, p) => s + p.chapitres_total, 0);
 ---
 <BaseLayout lang={lang} title={t('ecriture.titre')} theme="sombre" univers="ecriture">
   <main>
-    <BandeauSection univers="ecriture" titre="Bindjé" intro={t('ecriture.intro')} />
+    <BandeauSection univers="ecriture" numero={t('ecriture.numero')} titre={t('ecriture.titreAffiche')} intro={t('ecriture.intro')} />
+    <Defilant mots={t('ecriture.defilant').split(' ✦ ')} variante="or" />
     <div class="conteneur">
-      <CeQueJeFais univers="ecriture" lang={lang} />
-
       {phare && (
         <a class="phare" href={localizedPath('roman', lang, slugOf(phare.entry.id))} data-reveal
            style={phare.entry.data.couleur ? `--roman-clair: ${phare.entry.data.couleur.clair}; --roman-sombre: ${phare.entry.data.couleur.sombre}` : undefined}>
           {phare.entry.data.couverture && (
-            <Image class="couverture" src={phare.entry.data.couverture} alt={`${t('roman.couvertureAlt')} — ${phare.entry.data.titre}`} widths={[180, 360]} sizes="180px" />
+            <Image class="couverture" src={phare.entry.data.couverture} alt={`${t('roman.couvertureAlt')} — ${phare.entry.data.titre}`} widths={[240, 480]} sizes="(max-width: 719px) 60vw, 240px" />
           )}
           <span class="texte">
             <span class="etat">{t('roman.projetPhare')}</span>
-            <span class="titre font-titre">{phare.entry.data.titre}</span>
-            {phare.entry.data.sous_titre_en && lang === 'en' && <span class="sous-titre">{phare.entry.data.sous_titre_en}</span>}
+            <span class="titre font-affiche">{phare.entry.data.titre}</span>
+            {phare.entry.data.sous_titre_en && lang === 'en' && <span class="sous-titre font-titre">{phare.entry.data.sous_titre_en}</span>}
             <span class="genres">{phare.entry.data.genres.join(' · ')}</span>
+            {total > 0 && (
+              <span class="avancement">
+                <span class="barre" aria-hidden="true"><span style={`width: ${inkLevel(ecrits, total)}%`}></span></span>
+                <span class="petit">{ecrits} / {total} {t('accueil.chapitresEcrits')}</span>
+              </span>
+            )}
             <span class="lien">{t('ecriture.lireFiche')} →</span>
           </span>
         </a>
       )}
 
+      <h2 class="titre-section">{t('ecriture.aVenirTitre')}</h2>
       <div class="grille">
-        {aVenir.map(({ entry }) => <CarteRoman entry={entry} lang={lang} />)}
+        {aVenir.map(({ entry }, i) => <CarteRoman entry={entry} lang={lang} teinte={TEINTES[i % TEINTES.length]} />)}
       </div>
+
+      <CeQueJeFais univers="ecriture" lang={lang} />
     </div>
   </main>
 </BaseLayout>
 
 <style>
   .phare {
-    display: flex; gap: 28px; align-items: center; margin-top: 12px; padding: 24px; border-radius: 14px;
-    border: 1px solid var(--border); background: var(--surface); color: var(--fg); text-decoration: none;
+    display: grid; grid-template-columns: auto 1fr; gap: clamp(22px, 4vw, 48px); align-items: center;
+    margin-top: clamp(40px, 6vw, 72px); padding: clamp(20px, 3vw, 36px); border-radius: var(--radius);
+    background: var(--surface); border: 1px solid var(--border); color: var(--fg); text-decoration: none;
+    transition: transform .35s var(--ease-sortie);
   }
+  .phare:hover { transform: translateY(-3px); }
   :global([data-theme='sombre']) .phare { --roman: var(--roman-sombre); }
   :global([data-theme='clair']) .phare { --roman: var(--roman-clair); }
-  .couverture { width: 160px; flex: none; border-radius: 4px; box-shadow: 0 12px 30px rgb(0 0 0 / .35); }
-  .texte { display: grid; gap: 8px; }
-  .etat { font-size: 12px; color: var(--roman); }
-  .titre { font-size: clamp(32px, 5vw, 44px); font-weight: 600; color: var(--roman); line-height: 1.05; }
-  .sous-titre { font-style: italic; color: var(--muted); }
-  .genres { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
-  .lien { color: var(--accent); }
-  .grille { display: grid; gap: 16px; margin-top: 18px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); }
-  @media (max-width: 600px) { .phare { flex-direction: column; align-items: flex-start; } }
+  .couverture { width: clamp(160px, 18vw, 240px); height: auto; border-radius: 4px; box-shadow: 0 22px 44px rgb(0 0 0 / .45); transition: transform .45s var(--ease-sortie); }
+  .phare:hover .couverture { transform: rotate(-2deg) scale(1.02); }
+  .texte { display: grid; gap: 10px; }
+  .etat { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--roman); }
+  .titre { font-size: clamp(44px, 7vw, 96px); line-height: .88; text-transform: uppercase; color: var(--roman); }
+  .sous-titre { font-style: italic; font-size: 22px; color: var(--muted); }
+  .genres { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  .avancement { display: grid; gap: 6px; max-width: 360px; }
+  .barre { display: block; height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; }
+  .barre span { display: block; height: 100%; background: var(--roman); border-radius: 3px; }
+  .petit { font-size: 13px; color: var(--muted); }
+  .lien { color: var(--accent); font-weight: 600; }
+  .grille { display: grid; gap: 22px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); }
+  @media (max-width: 719px) {
+    .phare { grid-template-columns: 1fr; justify-items: start; }
+    .grille { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+  }
 </style>

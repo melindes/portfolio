@@ -26,7 +26,7 @@
   "code.ceQueJeFais": "Ce que je fais",
   "code.projets": "Projets",
   "code.competences": "Compétences",
-  "code.contactRecrutement": "Me contacter (recrutement / collaboration)",
+  "code.contactRecrutement": "Travaillons ensemble",
   "projet.probleme": "Le problème",
   "projet.solution": "La solution",
   "projet.fonctionnalites": "Ce que fait l’application",
@@ -86,7 +86,7 @@
   "contact.motifs.dessin-bd": "Dessin / BD",
   "contact.motifs.voix": "Voix pour le livre audio",
   "contact.motifs.soutien": "Soutien",
-  "contact.motifs.recrutement": "Recrutement / collaboration code",
+  "contact.motifs.recrutement": "Proposer un poste ou un projet",
   "contact.motifs.my-life": "My Life — être prévenu",
   "contact.motifs.autre": "Autre",
   "merci.titre": "Merci !",
@@ -103,5 +103,12 @@
   "accueil.rejoindreTexte": "Bêta-lecture, dessin, voix ou recrutement : il y a une place pour toi.",
   "accueil.recruteur": "Recruteur",
   "accueil.recruteurBouton": "Me recruter →",
-  "code.formation": "Formation"
+  "code.formation": "Formation",
+  "nav.menu": "Menu",
+  "code.numero": "01 — Melindes résout",
+  "ecriture.numero": "02 — Bindjé raconte",
+  "code.titreAffiche": "CODE",
+  "ecriture.titreAffiche": "ÉCRITURE",
+  "ecriture.defilant": "Drame psychologique ✦ Romance contemporaine ✦ New Adult ✦ Bande dessinée ✦ Livre audio ✦ Animation",
+  "ecriture.aVenirTitre": "Bientôt"
 }

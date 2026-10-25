@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BandeauSection from '../components/BandeauSection.astro';
+import Defilant from '../components/Defilant.astro';
 import CeQueJeFais from '../components/CeQueJeFais.astro';
 import CarteProjet from '../components/CarteProjet.astro';
 import { listLocalized, getCompetences, getAccueil } from '../lib/content';
@@ -15,33 +16,34 @@ const { diplome } = await getAccueil(lang);
 ---
 <BaseLayout lang={lang} title={t('code.titre')} theme="clair" univers="code">
   <main>
-    <BandeauSection univers="code" titre="Melindes" intro={t('code.intro')} />
+    <BandeauSection univers="code" numero={t('code.numero')} titre={t('code.titreAffiche')} intro={t('code.intro')} />
+    <Defilant mots={[...technos, 'Design']} />
     <div class="conteneur">
-      <CeQueJeFais univers="code" lang={lang} />
-
       <section class="projets" aria-labelledby="titre-projets">
-        <h2 id="titre-projets">{t('code.projets')}</h2>
+        <h2 id="titre-projets" class="titre-section">{t('code.projets')}</h2>
         <div class="grille">
-          {projets.map(({ entry }) => <CarteProjet entry={entry} lang={lang} />)}
+          {projets.map(({ entry }, i) => <CarteProjet entry={entry} lang={lang} vedette={i === 0} />)}
         </div>
       </section>
 
+      <CeQueJeFais univers="code" lang={lang} />
+
       <section class="competences" aria-labelledby="titre-competences" data-reveal>
-        <h2 id="titre-competences">{t('code.competences')}</h2>
+        <h2 id="titre-competences" class="titre-section">{t('code.competences')}</h2>
         <p class="formation"><strong>{t('code.formation')} :</strong> {diplome}</p>
         <ul class="font-code">{technos.map((x) => <li>{x}</li>)}</ul>
       </section>
 
-      <p class="contact"><a class="bouton bouton--plein" href={`${localizedPath('contact', lang)}?motif=recrutement`}>{t('code.contactRecrutement')}</a></p>
+      <p class="contact" data-reveal><a class="bouton bouton--plein" href={`${localizedPath('contact', lang)}?motif=recrutement`}>{t('code.contactRecrutement')}</a></p>
     </div>
   </main>
 </BaseLayout>
 
 <style>
-  h2 { font-size: 26px; margin: 40px 0 14px; }
-  .grille { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); }
+  .grille { display: grid; gap: 18px; grid-template-columns: 1.35fr 1fr; }
   .competences ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-  .competences li { font-size: 13px; padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; }
+  .competences li { font-size: 13px; padding: 7px 13px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
   .formation { margin: 0 0 14px; }
-  .contact { margin-top: 36px; }
+  .contact { margin-top: 40px; }
+  @media (max-width: 860px) { .grille { grid-template-columns: 1fr; } }
 </style>

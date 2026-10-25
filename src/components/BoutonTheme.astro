@@ -39,7 +39,7 @@ const { labelClair, labelSombre } = Astro.props;
         document.documentElement.dataset.theme = suivant;
         let stockage: Storage | undefined;
         try { stockage = window.localStorage; } catch { stockage = undefined; }
-        writeStored(stockage, THEME_KEY, suivant);
+        writeStored(stockage, `${THEME_KEY}:${document.documentElement.dataset.themeDefaut}`, suivant);
         majLibelle(bouton);
       });
     });

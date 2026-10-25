@@ -40,7 +40,8 @@ const absolu = (chemin: string) => (Astro.site ? new URL(chemin, Astro.site).hre
       (function () {
         function appliquer(d) {
           var s = null;
-          try { s = localStorage.getItem('theme'); } catch (e) {}
+          // Un choix par univers : clair par défaut (Code) ou sombre par défaut (Écriture).
+          try { s = localStorage.getItem('theme:' + d.dataset.themeDefaut); } catch (e) {}
           d.dataset.theme = s === 'clair' || s === 'sombre' ? s : d.dataset.themeDefaut;
           if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('js-reveal');
         }

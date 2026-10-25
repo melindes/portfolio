@@ -3,24 +3,37 @@ import type { CollectionEntry } from 'astro:content';
 import { localizedPath, useTranslations, type Lang } from '../lib/i18n';
 import { slugOf } from '../lib/content';
 
-interface Props { entry: CollectionEntry<'romans'>; lang: Lang }
-const { entry, lang } = Astro.props;
+interface Props { entry: CollectionEntry<'romans'>; lang: Lang; teinte?: string }
+const { entry, lang, teinte = 'var(--brun)' } = Astro.props;
 const t = useTranslations(lang);
 const d = entry.data;
+// « Pokou, héroïne malgré elle » → titre d'affiche « POKOU » + sous-titre en italique.
+// On ne coupe que si la suite commence par une minuscule (« Toi, Moi, Nous ! » reste entier).
+const coupe = d.titre.match(/^([^,]+),\s*(\p{Ll}.*)$/u);
+const principal = coupe ? coupe[1] : d.titre;
+const sousTitre = coupe ? coupe[2] : '';
 ---
-<a class="carte-roman" href={localizedPath('roman', lang, slugOf(entry.id))} data-reveal>
+<a class="carte-roman" href={localizedPath('roman', lang, slugOf(entry.id))} data-reveal style={`--teinte: ${teinte}`}>
   <span class="etat">{t('roman.aVenir')}</span>
-  <span class="titre font-titre">{d.titre}</span>
-  {d.genres.length > 0 && <span class="genres">{d.genres.join(' · ')}</span>}
+  <span class="titre">
+    <span class="principal font-affiche">{principal.trim()}</span>
+    {sousTitre && <span class="sous font-titre">{sousTitre}</span>}
+  </span>
+  <span class="auteur font-signature" aria-hidden="true">Bindjé</span>
 </a>
 
 <style>
   .carte-roman {
-    display: grid; gap: 8px; align-content: start; min-height: 150px; padding: 22px; border-radius: var(--radius);
-    border: 1px dashed var(--border); color: var(--fg); text-decoration: none; transition: transform .25s ease, border-color .25s;
+    position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 18px;
+    aspect-ratio: 2 / 3; padding: 22px; border-radius: 6px 14px 14px 6px; text-decoration: none; overflow: hidden;
+    background: linear-gradient(165deg, color-mix(in srgb, var(--teinte) 85%, white 6%), var(--teinte));
+    color: var(--text-on-dark); box-shadow: inset 6px 0 0 rgb(0 0 0 / .25), 0 16px 30px rgb(0 0 0 / .3);
+    transition: transform .35s var(--ease-sortie), box-shadow .35s var(--ease-sortie);
   }
-  .carte-roman:hover { transform: translateY(-3px); border-color: var(--accent); }
-  .etat { font-size: 12px; color: var(--muted); }
-  .titre { font-size: 26px; font-weight: 600; font-style: italic; line-height: 1.15; }
-  .genres { font-size: 13px; color: var(--muted); }
+  .carte-roman:hover { transform: translateY(-6px) rotate(-1deg); box-shadow: inset 6px 0 0 rgb(0 0 0 / .25), 0 26px 44px rgb(0 0 0 / .4); }
+  .etat { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; opacity: .85; }
+  .titre { display: grid; gap: 6px; }
+  .principal { font-size: clamp(32px, 3.6vw, 46px); line-height: .92; text-transform: uppercase; letter-spacing: .01em; }
+  .sous { font-style: italic; font-size: 20px; opacity: .9; }
+  .auteur { font-size: 30px; color: var(--gold-on-dark); align-self: flex-end; }
 </style>

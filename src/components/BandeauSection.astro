@@ -1,22 +1,33 @@
 ---
-// Bande d'en-tête d'une section : c'est elle que la moitié cliquée de l'accueil « devient »
+// En-tête « affiche » d'une section : c'est lui que la moitié cliquée de l'accueil « devient »
 // (même transition:name que la porte correspondante).
-interface Props { univers: 'code' | 'ecriture'; titre: string; intro?: string }
-const { univers, titre, intro } = Astro.props;
+interface Props { univers: 'code' | 'ecriture'; numero: string; titre: string; intro?: string }
+const { univers, numero, titre, intro } = Astro.props;
+const lettres = [...titre];
 ---
 <header class={`bandeau-section bandeau--${univers}`} transition:name={`porte-${univers}`}>
   <div class="conteneur">
-    <h1 class={univers === 'code' ? 'font-code' : 'font-signature'}>{titre}</h1>
-    {intro && <p>{intro}</p>}
+    <p class="numero font-code">{numero}</p>
+    <h1 class="font-affiche" aria-label={titre}>
+      {lettres.map((l, i) => <span class="lettre" aria-hidden="true" style={`--i: ${i}`}>{l}</span>)}
+    </h1>
+    {univers === 'ecriture' && <p class="signature font-signature" aria-hidden="true">Bindjé</p>}
+    {intro && <p class="intro">{intro}</p>}
   </div>
 </header>
 
 <style>
-  .bandeau-section { padding-block: 40px 32px; }
-  .bandeau--code { background: var(--paper); color: var(--ink); border-bottom: 1px solid #e4e4e4; }
-  .bandeau--ecriture { background: var(--ink); color: var(--text-on-dark); border-bottom: 1px solid #2c2c2c; }
-  h1 { margin: 0; font-weight: 400; line-height: 1.1; }
-  .font-code { font-size: clamp(32px, 5vw, 48px); }
-  .font-signature { font-size: clamp(48px, 8vw, 76px); }
-  p { margin: 10px 0 0; max-width: 640px; opacity: .8; }
+  .bandeau-section { position: relative; overflow: hidden; padding-block: clamp(36px, 6vw, 72px) clamp(28px, 4vw, 48px); }
+  .bandeau--code { background: var(--paper); color: var(--ink); }
+  .bandeau--ecriture { background: radial-gradient(ellipse at 75% 20%, var(--brun), var(--ink) 70%); color: var(--text-on-dark); }
+  .numero { margin: 0 0 6px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
+  h1 {
+    margin: 0; padding-top: .12em; font-weight: 400; line-height: .82; letter-spacing: .01em;
+    font-size: clamp(72px, 16vw, 220px); overflow-wrap: anywhere;
+  }
+  .bandeau--ecriture h1 { color: var(--gold-on-dark); }
+  .lettre { display: inline-block; animation: lettre-monte .7s var(--ease-sortie) both; animation-delay: calc(var(--i) * 60ms); }
+  .signature { margin: 4px 0 0; font-size: clamp(34px, 4vw, 52px); line-height: 1; }
+  .intro { margin: 18px 0 0; max-width: 620px; font-size: 17px; opacity: .85; }
+  @keyframes lettre-monte { from { transform: translateY(40%); opacity: 0; } to { transform: none; opacity: 1; } }
 </style>
