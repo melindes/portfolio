@@ -1,0 +1,31 @@
+---
+// Fait apparaître en fondu les éléments [data-reveal] quand ils entrent à l'écran.
+// Sans IntersectionObserver ou avec « réduire les animations », tout est visible d'emblée.
+---
+<style is:global>
+  .js-reveal [data-reveal] { opacity: 0; transform: translateY(8px); transition: opacity .6s ease, transform .6s ease; }
+  .js-reveal [data-reveal].is-visible { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .js-reveal [data-reveal] { opacity: 1; transform: none; }
+  }
+</style>
+
+<script>
+  function init() {
+    const els = document.querySelectorAll<HTMLElement>('[data-reveal]:not(.is-visible)');
+    const reduit = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduit || !('IntersectionObserver' in window)) {
+      els.forEach((el) => el.classList.add('is-visible'));
+      return;
+    }
+    document.documentElement.classList.add('js-reveal');
+    const obs = new IntersectionObserver((entrees) => {
+      entrees.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.15 });
+    els.forEach((el) => obs.observe(el));
+  }
+  init();
+  document.addEventListener('astro:page-load', init);
+</script>

@@ -1,0 +1,32 @@
+---
+import Badge from './Badge.astro';
+import { getCompetences } from '../lib/content';
+import { useTranslations, type Lang } from '../lib/i18n';
+
+interface Props { univers: 'code' | 'ecriture'; lang: Lang }
+const { univers, lang } = Astro.props;
+const t = useTranslations(lang);
+const { activites } = await getCompetences();
+const liste = activites.filter((a) => a.univers === univers);
+---
+<section class="ce-que-je-fais" aria-labelledby={`cqjf-${univers}`} data-reveal>
+  <h2 id={`cqjf-${univers}`}>{t(`${univers}.ceQueJeFais`)}</h2>
+  <ul>
+    {liste.map((a) => (
+      <li>
+        <span class="nom">{lang === 'fr' ? a.nom_fr : a.nom_en}</span>
+        <Badge etat={a.badge} lang={lang} />
+        <span class="preuve">{lang === 'fr' ? a.preuve_fr : a.preuve_en}</span>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .ce-que-je-fais { margin-block: 32px; }
+  h2 { font-size: 26px; margin: 0 0 12px; }
+  ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+  li { border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; display: grid; gap: 6px; justify-items: start; }
+  .nom { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 21px; }
+  .preuve { color: var(--muted); font-size: 14px; }
+</style>

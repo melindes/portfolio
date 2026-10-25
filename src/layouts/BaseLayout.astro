@@ -4,6 +4,7 @@ import '../styles/tokens.css';
 import '../styles/global.css';
 import Header, { type Univers } from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Reveal from '../components/Reveal.astro';
 import { alternatePath, otherLang, useTranslations, type Lang } from '../lib/i18n';
 
 interface Props {
@@ -37,6 +38,7 @@ const ailleurs = alternatePath(ici);
         var d = document.documentElement, s = null;
         try { s = localStorage.getItem('theme'); } catch (e) {}
         d.dataset.theme = s === 'clair' || s === 'sombre' ? s : d.dataset.themeDefaut;
+        if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('js-reveal');
       })();
     </script>
     <slot name="head" />
@@ -45,5 +47,6 @@ const ailleurs = alternatePath(ici);
     <Header lang={lang} univers={univers} />
     <slot />
     <Footer lang={lang} />
+    <Reveal />
   </body>
 </html>
