@@ -1,0 +1,50 @@
+---
+import { Image } from 'astro:assets';
+import portrait from '../assets/portrait.jpg';
+import { localizedPath, useTranslations, type Lang } from '../lib/i18n';
+
+interface Props { lang: Lang; nom: string; diplome: string; paragraphes: string[] }
+const { lang, nom, diplome, paragraphes } = Astro.props;
+const t = useTranslations(lang);
+---
+<section class="qui-suis-je" aria-labelledby="qui-nom">
+  <div class="frontiere" data-reveal>
+    <Image class="photo" src={portrait} alt={t('accueil.portraitAlt')} widths={[220, 280, 440, 560]} sizes="(max-width: 719px) 220px, 280px" loading="lazy" />
+    <p class="noms"><span class="cote-melindes font-code">Melindes</span><span class="cote-bindje font-titre">Bindjé</span></p>
+    <h2 id="qui-nom" class="nom">{nom} <span class="diplome">· {diplome}</span></h2>
+  </div>
+  <div class="texte conteneur" data-reveal>
+    {paragraphes.map((p) => <p>{p}</p>)}
+    <p class="appels">
+      <a class="bouton bouton--plein" href={localizedPath('code', lang)}>{t('accueil.voirProjets')}</a>
+      <a class="bouton" href={`${localizedPath('roman', lang, 'les-larmes-du-present')}#rejoindre`}>{t('accueil.rejoindre')}</a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .frontiere {
+    background: linear-gradient(90deg, var(--paper) 50%, var(--ink) 50%);
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+    padding: 56px 16px 40px; text-align: center;
+  }
+  .photo {
+    width: 280px; aspect-ratio: 4 / 5; height: auto; object-fit: cover; border-radius: 6px;
+    box-shadow: 0 0 0 4px rgb(217 180 90 / .2), 0 18px 40px rgb(0 0 0 / .35);
+  }
+  .noms { display: flex; width: 100%; margin: 0; }
+  .noms span { flex: 1; }
+  .cote-melindes { text-align: right; padding-right: 12px; color: var(--ink); font-size: 16px; }
+  .cote-bindje { text-align: left; padding-left: 12px; color: var(--text-on-dark); font-style: italic; font-size: 21px; }
+  .nom {
+    margin: 4px 0 0; font-size: clamp(22px, 3.4vw, 30px); color: var(--gold-on-dark);
+    background: var(--ink); padding: 6px 18px; border-radius: 999px; max-width: 100%;
+  }
+  .diplome { font-weight: 500; }
+  .texte { max-width: 680px; padding-block: 28px 8px; font-size: 17px; }
+  .appels { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+  @media (max-width: 719px) {
+    .photo { width: 220px; }
+    .nom { border-radius: 14px; }
+  }
+</style>
