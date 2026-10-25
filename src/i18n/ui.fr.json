@@ -80,7 +80,7 @@
   "contact.succes": "Merci, je te réponds vite.",
   "contact.erreur": "L’envoi a échoué, réessaie.",
   "contact.erreurEmail": "Tu peux aussi m’écrire directement :",
-  "contact.erreurPlusTard": "Réessaie plus tard.",
+  "contact.erreurPlusTard": "Le service est peut-être momentanément indisponible.",
   "contact.oeuvre": "À propos de",
   "contact.motifs.beta-lecture": "Bêta-lecture",
   "contact.motifs.dessin-bd": "Dessin / BD",

@@ -5,6 +5,7 @@ import Badge from '../components/Badge.astro';
 import NoteTraduction from '../components/NoteTraduction.astro';
 import TroisLivres from '../components/TroisLivres.astro';
 import { getLocalized } from '../lib/content';
+import { withSourceProgress } from '../lib/ink';
 import { localizedPath, useTranslations, type Lang } from '../lib/i18n';
 
 interface Props { lang: Lang; slug: string }
@@ -13,6 +14,8 @@ const t = useTranslations(lang);
 const fiche = await getLocalized('romans', slug, lang);
 if (!fiche) throw new Error(`Roman introuvable : ${slug}`);
 const d = fiche.entry.data;
+const source = lang !== 'fr' && !fiche.isFallback ? (await getLocalized('romans', slug, 'fr'))?.entry.data.parties : undefined;
+const parties = withSourceProgress(d.parties, source);
 const contact = (motif: string) => `${localizedPath('contact', lang)}?motif=${motif}&oeuvre=${slug}`;
 const ROLES = [
   { cle: 'beta', motif: 'beta-lecture' },
@@ -23,7 +26,7 @@ const ROLES = [
 const style = d.couleur ? `--roman-clair: ${d.couleur.clair}; --roman-sombre: ${d.couleur.sombre}` : undefined;
 ---
 <BaseLayout lang={lang} title={d.titre} description={d.resume} theme="sombre" univers="ecriture">
-  <main class="fiche-roman" style={style}>
+  <main class="fiche-roman" style={style} lang={fiche.isFallback ? 'fr' : undefined}>
     {fiche.isFallback && <NoteTraduction lang={lang} />}
     <nav class="conteneur fil" aria-label="Fil d’Ariane"><a href={localizedPath('ecriture', lang)}>{t('nav.ecriture')}</a> / {d.titre}</nav>
 
@@ -52,7 +55,7 @@ const style = d.couleur ? `--roman-clair: ${d.couleur.clair}; --roman-sombre: ${
       {d.parties.length > 0 && (
         <section>
           <h2>{t('roman.ouEnEst')}</h2>
-          <TroisLivres parties={d.parties} lang={lang} />
+          <TroisLivres parties={parties} lang={lang} />
         </section>
       )}
 

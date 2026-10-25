@@ -19,7 +19,7 @@ const style = d.couleur
   : undefined;
 ---
 <BaseLayout lang={lang} title={d.titre} description={d.slogan ?? d.probleme} theme="clair" univers="code">
-  <main class="fiche-projet" style={style}>
+  <main class="fiche-projet" style={style} lang={fiche.isFallback ? 'fr' : undefined}>
     {fiche.isFallback && <NoteTraduction lang={lang} />}
     <nav class="conteneur fil font-code" aria-label="Fil d’Ariane"><a href={localizedPath('code', lang)}>code</a> / {slug}</nav>
 

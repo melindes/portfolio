@@ -58,3 +58,9 @@ test('fiche anglaise traduite', async ({ page }) => {
   await expect(page.getByText('The Tears of the Present')).toBeVisible();
   await expect(page.getByText('Translation coming soon')).toHaveCount(0);
 });
+
+test('page EN non traduite : le contenu est déclaré en français', async ({ page }) => {
+  await page.goto('/en/writing/pokou');
+  await expect(page.locator('main')).toHaveAttribute('lang', 'fr');
+  await expect(page.getByText('Translation coming soon')).toHaveAttribute('lang', 'en');
+});

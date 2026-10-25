@@ -24,7 +24,7 @@ Copie `.env.example` en `.env` et renseigne au moins `PUBLIC_WEB3FORMS_KEY` pour
 
 Tout le contenu est dans `src/content/`. Une erreur de saisie fait échouer la construction avec un message clair : rien de cassé n'est publié.
 
-- **Avancement du roman** — `src/content/romans/fr/les-larmes-du-present.md` (et `en/`) : change `chapitres_ecrits` dans `parties`, et `en_cours` pour le chapitre en cours. Les livres se remplissent tout seuls.
+- **Avancement du roman** — `src/content/romans/fr/les-larmes-du-present.md` uniquement : change `chapitres_ecrits` dans `parties`, et `en_cours` pour le chapitre en cours. La version anglaise reprend automatiquement ces chiffres ; les livres se remplissent tout seuls.
 - **Pitch d'un roman à venir** — ajoute `genres`, `resume` (et `couverture`) dans `src/content/romans/fr/<roman>.md`. Pour la version anglaise, crée le même fichier dans `en/` ; sans lui, la page anglaise affiche le français avec « Translation coming soon ».
 - **Extrait** — champ `extrait` (une ligne par paragraphe). Sans extrait, la section disparaît.
 - **TutorLink** — complète `src/content/projets/fr/tutorlink.md` (problème, solution, technos, crédit du binôme) **après l'accord de ton binôme**, puis passe `publie: true`.

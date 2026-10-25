@@ -80,7 +80,7 @@
   "contact.succes": "Thank you, I’ll reply soon.",
   "contact.erreur": "Sending failed, please try again.",
   "contact.erreurEmail": "You can also write to me directly:",
-  "contact.erreurPlusTard": "Please try again later.",
+  "contact.erreurPlusTard": "The service may be temporarily unavailable.",
   "contact.oeuvre": "About",
   "contact.motifs.beta-lecture": "Beta reading",
   "contact.motifs.dessin-bd": "Drawing / comics",

@@ -77,6 +77,8 @@ const libelles = Object.fromEntries(MOTIFS.map((m) => [m, t(`contact.motifs.${m}
 <script>
   import { buildSubject, parseContactParams, type Motif } from '../lib/contact';
 
+  const DELAI_MAX_MS = 15_000;
+
   function init() {
     const form = document.querySelector<HTMLFormElement>('.formulaire-contact');
     if (!form || form.dataset.pret) return;
@@ -114,11 +116,15 @@ const libelles = Object.fromEntries(MOTIFS.map((m) => [m, t(`contact.motifs.${m}
       try {
         const donnees = Object.fromEntries(new FormData(form));
         delete donnees.redirect;
+        // Délai maximal : sur un réseau qui ne répond pas, on rend la main au visiteur.
+        const controle = new AbortController();
+        const minuterie = window.setTimeout(() => controle.abort(), DELAI_MAX_MS);
         const rep = await fetch(form.action, {
+          signal: controle.signal,
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify(donnees),
-        });
+        }).finally(() => window.clearTimeout(minuterie));
         const json = (await rep.json().catch(() => ({}))) as { success?: boolean };
         if (!rep.ok || !json.success) throw new Error('refus');
         form.reset();

@@ -61,3 +61,24 @@ test('page de remerciement', async ({ page }) => {
   await page.goto('/en/contact/merci');
   await expect(page.locator('h1')).toHaveText('Thank you!');
 });
+
+test('message d’erreur sans email de secours : pas de répétition', async ({ page }) => {
+  await page.route(API, (r) => r.abort());
+  await page.goto('/fr/contact');
+  await remplir(page);
+  await page.getByRole('button', { name: 'Envoyer' }).click();
+  const texte = (await page.locator('.erreur').innerText()).trim();
+  expect(texte.match(/réessaie/gi)?.length ?? 0).toBe(1);
+});
+
+test('requête qui ne répond jamais → erreur après le délai maximal', async ({ page }) => {
+  await page.clock.install();
+  await page.route(API, () => { /* ne répond jamais */ });
+  await page.goto('/fr/contact');
+  await remplir(page);
+  await page.getByRole('button', { name: 'Envoyer' }).click();
+  await expect(page.getByRole('button', { name: 'Envoi…' })).toBeDisabled();
+  await page.clock.runFor(16_000);
+  await expect(page.getByText('L’envoi a échoué', { exact: false })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Envoyer' })).toBeEnabled();
+});
