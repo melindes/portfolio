@@ -1,0 +1,20 @@
+---
+// Bandeau de mots qui défile en boucle (décoratif : l'information existe ailleurs sur la page).
+interface Props { mots: string[]; variante?: 'encre' | 'or' }
+const { mots, variante = 'encre' } = Astro.props;
+const suite = mots.map((m) => m.toUpperCase()).join(' ✦ ') + ' ✦ ';
+---
+<div class={`defilant defilant--${variante} font-affiche`} aria-hidden="true">
+  <div class="piste"><span>{suite}</span><span>{suite}</span></div>
+</div>
+
+<style>
+  .defilant { overflow: hidden; white-space: nowrap; font-size: clamp(20px, 2.4vw, 30px); letter-spacing: .03em; padding-block: 12px; }
+  .defilant--encre { background: var(--ink); color: var(--gold-on-dark); }
+  .defilant--or { background: var(--gold-on-dark); color: var(--ink); }
+  .piste { display: inline-flex; animation: defile 28s linear infinite; }
+  .piste span { padding-right: .4em; }
+  .defilant:hover .piste { animation-play-state: paused; }
+  @keyframes defile { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .piste { animation: none; } }
+</style>

@@ -15,7 +15,7 @@ const accueil = localizedPath('home', lang);
       <span class="font-affiche">PORTFOLIO</span><span class="point" aria-hidden="true">.</span>
       <span class="sr-only">— {t('nav.accueil')}</span>
     </a>
-    <nav aria-label="Navigation principale">
+    <nav id="nav-principale" aria-label="Navigation principale">
       <a href={localizedPath('code', lang)} aria-current={univers === 'code' ? 'page' : undefined}>{t('nav.code')}</a>
       <a href={localizedPath('ecriture', lang)} aria-current={univers === 'ecriture' ? 'page' : undefined}>{t('nav.ecriture')}</a>
       <a href={localizedPath('contact', lang)}>{t('nav.contact')}</a>
@@ -23,21 +23,70 @@ const accueil = localizedPath('home', lang);
     <div class="outils">
       <SelecteurLangue lang={lang} />
       <BoutonTheme labelClair={t('theme.clair')} labelSombre={t('theme.sombre')} />
+      <button type="button" class="bouton-menu" aria-controls="nav-principale" aria-expanded="false" aria-label={t('nav.menu')}>
+        <span aria-hidden="true"></span>
+      </button>
     </div>
   </div>
 </header>
 
 <style>
-  .entete { border-bottom: 1px solid var(--border); background: var(--bg); }
-  .barre { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; padding-block: 10px; }
+  .entete { position: relative; z-index: 20; border-bottom: 1px solid var(--border); background: var(--bg); }
+  .barre { display: flex; align-items: center; gap: 8px 24px; padding-block: 12px; }
   .logo { display: inline-flex; align-items: baseline; color: var(--fg); text-decoration: none; font-size: 26px; letter-spacing: .02em; line-height: 1; }
   .point { color: var(--accent); }
-  nav { display: flex; gap: 4px 16px; flex-wrap: wrap; margin-left: auto; }
-  nav a { color: var(--muted); text-decoration: none; font-size: 14px; padding: 6px 2px; }
+  nav { display: flex; gap: 4px 22px; margin-left: auto; }
+  nav a { position: relative; color: var(--muted); text-decoration: none; font-size: 14px; padding: 6px 2px; transition: color .2s ease; }
+  nav a::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--accent);
+    transform: scaleX(0); transform-origin: left; transition: transform .25s var(--ease-sortie);
+  }
   nav a:hover, nav a[aria-current='page'] { color: var(--fg); }
+  nav a:hover::after, nav a[aria-current='page']::after { transform: scaleX(1); }
   .outils { display: flex; align-items: center; gap: 6px; }
-  @media (max-width: 560px) {
-    nav { margin-left: 0; order: 3; width: 100%; }
+  .bouton-menu { display: none; }
+
+  @media (max-width: 719px) {
     .outils { margin-left: auto; }
+    .bouton-menu {
+      display: inline-grid; place-items: center; width: 42px; height: 42px; border-radius: 50%;
+      border: 1px solid var(--border); background: transparent; color: var(--fg); cursor: pointer;
+    }
+    .bouton-menu span, .bouton-menu span::before, .bouton-menu span::after {
+      display: block; width: 18px; height: 2px; background: currentColor; border-radius: 2px; position: relative;
+      transition: transform .25s ease, background .25s ease;
+    }
+    .bouton-menu span::before, .bouton-menu span::after { content: ''; position: absolute; left: 0; }
+    .bouton-menu span::before { top: -6px; }
+    .bouton-menu span::after { top: 6px; }
+    .bouton-menu[aria-expanded='true'] span { background: transparent; }
+    .bouton-menu[aria-expanded='true'] span::before { transform: translateY(6px) rotate(45deg); }
+    .bouton-menu[aria-expanded='true'] span::after { transform: translateY(-6px) rotate(-45deg); }
+    nav {
+      display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; gap: 0;
+      background: var(--bg); border-bottom: 1px solid var(--border); padding: 8px 16px 16px; margin: 0;
+    }
+    nav.ouvert { display: flex; }
+    nav a { font: 28px Anton, Impact, sans-serif; text-transform: uppercase; letter-spacing: .02em; color: var(--fg); padding: 10px 0; }
+    nav a::after { display: none; }
+    nav a[aria-current='page'] { color: var(--accent); }
   }
 </style>
+
+<script>
+  function init() {
+    const bouton = document.querySelector<HTMLButtonElement>('.bouton-menu');
+    const nav = document.getElementById('nav-principale');
+    if (!bouton || !nav || bouton.dataset.pret) return;
+    bouton.dataset.pret = '1';
+    const fermer = () => { nav.classList.remove('ouvert'); bouton.setAttribute('aria-expanded', 'false'); };
+    bouton.addEventListener('click', () => {
+      const ouvert = nav.classList.toggle('ouvert');
+      bouton.setAttribute('aria-expanded', String(ouvert));
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') fermer(); });
+    nav.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) fermer(); });
+  }
+  init();
+  document.addEventListener('astro:page-load', init);
+</script>

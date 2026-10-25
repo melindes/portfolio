@@ -10,23 +10,28 @@ const { activites } = await getCompetences();
 const liste = activites.filter((a) => a.univers === univers);
 ---
 <section class="ce-que-je-fais" aria-labelledby={`cqjf-${univers}`} data-reveal>
-  <h2 id={`cqjf-${univers}`}>{t(`${univers}.ceQueJeFais`)}</h2>
-  <ul>
-    {liste.map((a) => (
+  <h2 id={`cqjf-${univers}`} class="titre-section">{t(`${univers}.ceQueJeFais`)}</h2>
+  <ol>
+    {liste.map((a, i) => (
       <li>
-        <span class="nom">{lang === 'fr' ? a.nom_fr : a.nom_en}</span>
+        <span class="num font-code">0{i + 1}</span>
+        <span class="nom font-affiche">{lang === 'fr' ? a.nom_fr : a.nom_en}</span>
         <Badge etat={a.badge} lang={lang} />
         <span class="preuve">{lang === 'fr' ? a.preuve_fr : a.preuve_en}</span>
       </li>
     ))}
-  </ul>
+  </ol>
 </section>
 
 <style>
-  .ce-que-je-fais { margin-block: 32px; }
-  h2 { font-size: 26px; margin: 0 0 12px; }
-  ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
-  li { border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; display: grid; gap: 6px; justify-items: start; }
-  .nom { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 21px; }
+  ol { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+  li {
+    position: relative; display: grid; gap: 8px; justify-items: start; align-content: start;
+    padding: 22px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border);
+    border-top: 4px solid var(--accent); transition: transform .3s var(--ease-sortie);
+  }
+  li:hover { transform: translateY(-3px); }
+  .num { font-size: 12px; color: var(--muted); }
+  .nom { font-size: clamp(30px, 3vw, 40px); line-height: .95; text-transform: uppercase; letter-spacing: .01em; }
   .preuve { color: var(--muted); font-size: 14px; }
 </style>

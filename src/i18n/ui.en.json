@@ -26,7 +26,7 @@
   "code.ceQueJeFais": "What I do",
   "code.projets": "Projects",
   "code.competences": "Skills",
-  "code.contactRecrutement": "Contact me (hiring / collaboration)",
+  "code.contactRecrutement": "Let’s work together",
   "projet.probleme": "The problem",
   "projet.solution": "The solution",
   "projet.fonctionnalites": "What the app does",
@@ -86,7 +86,7 @@
   "contact.motifs.dessin-bd": "Drawing / comics",
   "contact.motifs.voix": "Audiobook voice",
   "contact.motifs.soutien": "Support",
-  "contact.motifs.recrutement": "Hiring / code collaboration",
+  "contact.motifs.recrutement": "Job or project proposal",
   "contact.motifs.my-life": "My Life — get notified",
   "contact.motifs.autre": "Other",
   "merci.titre": "Thank you!",
@@ -103,5 +103,12 @@
   "accueil.rejoindreTexte": "Beta reading, drawing, voice or hiring: there is a place for you.",
   "accueil.recruteur": "Recruiter",
   "accueil.recruteurBouton": "Hire me →",
-  "code.formation": "Education"
+  "code.formation": "Education",
+  "nav.menu": "Menu",
+  "code.numero": "01 — Melindes solves",
+  "ecriture.numero": "02 — Bindjé tells",
+  "code.titreAffiche": "CODE",
+  "ecriture.titreAffiche": "WRITING",
+  "ecriture.defilant": "Psychological drama ✦ Contemporary romance ✦ New Adult ✦ Comics ✦ Audiobook ✦ Animation",
+  "ecriture.aVenirTitre": "Coming next"
 }

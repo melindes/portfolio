@@ -3,7 +3,7 @@
 // Sans IntersectionObserver ou avec « réduire les animations », tout est visible d'emblée.
 ---
 <style is:global>
-  .js-reveal [data-reveal] { opacity: 0; transform: translateY(8px); transition: opacity .6s ease, transform .6s ease; }
+  .js-reveal [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s cubic-bezier(.2, .7, .2, 1); }
   .js-reveal [data-reveal].is-visible { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) {
     .js-reveal [data-reveal] { opacity: 1; transform: none; }

@@ -1,29 +1,61 @@
 ---
+import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import { localizedPath, type Lang } from '../lib/i18n';
 import { slugOf } from '../lib/content';
 
-interface Props { entry: CollectionEntry<'projets'>; lang: Lang }
-const { entry, lang } = Astro.props;
+interface Props { entry: CollectionEntry<'projets'>; lang: Lang; vedette?: boolean }
+const { entry, lang, vedette = false } = Astro.props;
 const d = entry.data;
+const captures = d.fonctionnalites.slice(0, 3).map((f) => f.capture);
+const style = d.couleur
+  ? `--fond-debut: ${d.couleur.fond_debut}; --fond-fin: ${d.couleur.fond_fin}; --texte: #f3efe8;`
+  : '--fond-debut: var(--ink); --fond-fin: var(--ink); --texte: var(--text-on-dark);';
 ---
-<a class="carte-projet" href={localizedPath('projet', lang, slugOf(entry.id))} data-reveal style={d.couleur ? `--projet: ${d.couleur.accent}` : undefined}>
-  <span class="etat">{d.badge_texte}</span>
-  <span class="titre">{d.titre}</span>
-  {d.resume_carte && <span class="resume">{d.resume_carte}</span>}
-  <span class="technos font-code">{d.technos.slice(0, 4).join(' · ')}</span>
+<a class:list={['carte-projet', { 'carte-projet--vedette': vedette }]} href={localizedPath('projet', lang, slugOf(entry.id))} data-reveal style={style}>
+  {captures.length > 0 && (
+    <span class="captures" aria-hidden="true">
+      {captures.map((c, i) => <Image src={c} alt="" widths={[120, 240]} sizes="120px" loading="lazy" style={`--n: ${i}`} />)}
+    </span>
+  )}
+  <span class="texte">
+    <span class="etat">{d.badge_texte}</span>
+    <span class="titre font-affiche">
+      {d.titre === 'Portfolio' ? <>Port<span class="or">folio</span></> : d.titre}
+    </span>
+    {d.resume_carte && <span class="resume">{d.resume_carte}</span>}
+    <span class="technos">{d.technos.slice(0, 4).map((x) => <span>{x}</span>)}</span>
+  </span>
 </a>
 
 <style>
   .carte-projet {
-    display: grid; gap: 8px; align-content: start; padding: 22px; border-radius: var(--radius);
-    border: 1px solid var(--border); border-top: 4px solid var(--projet, var(--accent));
-    background: var(--surface); color: var(--fg); text-decoration: none;
-    transition: transform .25s ease, box-shadow .25s ease;
+    position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;
+    min-height: 320px; padding: clamp(18px, 2.4vw, 28px); border-radius: var(--radius); text-decoration: none;
+    background: linear-gradient(160deg, var(--fond-debut), var(--fond-fin)); color: var(--texte);
+    transition: transform .35s var(--ease-sortie), box-shadow .35s var(--ease-sortie);
   }
-  .carte-projet:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgb(0 0 0 / .08); }
-  .etat { font-size: 12px; color: var(--muted); }
-  .titre { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 28px; line-height: 1.1; }
-  .resume { font-size: 15px; }
-  .technos { font-size: 12px; color: var(--muted); }
+  .carte-projet:hover { transform: translateY(-4px); box-shadow: 0 22px 40px rgb(20 17 15 / .28); }
+  .captures { position: absolute; top: 22px; right: 22px; display: flex; gap: 10px; }
+  .captures img {
+    width: clamp(64px, 7vw, 96px); height: auto; border-radius: 12px; border: 3px solid #0d0b0a;
+    box-shadow: 0 12px 24px rgb(0 0 0 / .4);
+    transform: rotate(calc((var(--n) - 1) * 5deg)) translateY(calc(var(--n) * 6px));
+    transition: transform .45s var(--ease-sortie);
+  }
+  .carte-projet:hover .captures img { transform: rotate(calc((var(--n) - 1) * 9deg)) translateY(-8px); }
+  .texte { position: relative; display: grid; gap: 8px; max-width: 520px; }
+  .etat { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; opacity: .85; }
+  .titre { font-size: clamp(44px, 6vw, 76px); line-height: .9; letter-spacing: .01em; text-transform: uppercase; }
+  .or { color: var(--gold-on-dark); }
+  .resume { font-size: 15px; opacity: .9; }
+  .technos { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+  .technos span { font: 12px 'JetBrains Mono', monospace; padding: 4px 9px; border-radius: 6px; background: rgb(255 255 255 / .1); }
+  .carte-projet--vedette { min-height: 380px; }
+  @media (max-width: 719px) {
+    .carte-projet { min-height: 0; }
+    .captures { position: static; order: -1; margin: 0 0 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; }
+    .captures img { width: 110px; transform: none; scroll-snap-align: start; flex: none; }
+    .carte-projet:hover .captures img { transform: none; }
+  }
 </style>
