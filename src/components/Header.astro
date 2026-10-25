@@ -11,10 +11,11 @@ const accueil = localizedPath('home', lang);
 ---
 <header class="entete">
   <div class="conteneur barre">
-    <a class="logo" href={accueil} aria-label={t('nav.accueil')}>
+    <a class="logo" href={accueil}>
       {univers !== 'ecriture' && <span class="font-code">Melindes</span>}
       {univers === 'neutre' && <span class="sep" aria-hidden="true">·</span>}
       {univers !== 'code' && <span class="font-signature signature">Bindjé</span>}
+      <span class="sr-only">— {t('nav.accueil')}</span>
     </a>
     <nav aria-label="Navigation principale">
       <a href={localizedPath('code', lang)} aria-current={univers === 'code' ? 'page' : undefined}>{t('nav.code')}</a>

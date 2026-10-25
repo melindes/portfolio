@@ -1,18 +1,11 @@
-/* Polices auto-hébergées (sous-ensembles latin + latin-ext). */
+/* Polices auto-hébergées (sous-ensemble latin : couvre le français et l'anglais). */
 @import '@fontsource/inter/latin-400.css';
-@import '@fontsource/inter/latin-ext-400.css';
 @import '@fontsource/inter/latin-600.css';
-@import '@fontsource/inter/latin-ext-600.css';
 @import '@fontsource/jetbrains-mono/latin-400.css';
-@import '@fontsource/jetbrains-mono/latin-ext-400.css';
 @import '@fontsource/cormorant-garamond/latin-500.css';
-@import '@fontsource/cormorant-garamond/latin-ext-500.css';
 @import '@fontsource/cormorant-garamond/latin-500-italic.css';
-@import '@fontsource/cormorant-garamond/latin-ext-500-italic.css';
 @import '@fontsource/cormorant-garamond/latin-600.css';
-@import '@fontsource/cormorant-garamond/latin-ext-600.css';
 @import '@fontsource/allura/latin-400.css';
-@import '@fontsource/allura/latin-ext-400.css';
 
 .font-code { font-family: 'JetBrains Mono', ui-monospace, monospace; }
 .font-titre { font-family: 'Cormorant Garamond', Georgia, serif; }
