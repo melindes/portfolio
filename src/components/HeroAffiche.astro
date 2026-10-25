@@ -1,35 +1,35 @@
 ---
 import { Image } from 'astro:assets';
 import portrait from '../assets/portrait-detoure.png';
+import Defilant from './Defilant.astro';
 import { localizedPath, useTranslations, type Lang } from '../lib/i18n';
 
 interface Props { lang: Lang; nom: string; sousTitreMelindes: string; sousTitreBindje: string }
 const { lang, nom, sousTitreMelindes, sousTitreBindje } = Astro.props;
 const t = useTranslations(lang);
+const mots = t('accueil.defilant').split(' ✦ ');
 ---
 <section class="affiche" data-state="done" aria-label="Portfolio — Melindes · Bindjé">
-  <div class="scene">
-    <!-- Les deux moitiés du fond : c'est elles que « la porte s'ouvre » transforme en bandeau de section. -->
-    <span class="moitie moitie--code" transition:name="porte-code" aria-hidden="true"></span>
-    <span class="moitie moitie--ecriture" transition:name="porte-ecriture" aria-hidden="true"></span>
-    <p class="identite font-affiche">{nom}</p>
-    <p class="mot font-affiche" aria-hidden="true"><span class="g">POR</span><span class="t">T</span><span class="d">FOLIO</span></p>
-    <Image class="photo" src={portrait} alt={t('accueil.portraitAlt')} widths={[300, 460, 700]} sizes="(max-width: 719px) 60vw, 460px" loading="eager" fetchpriority="high" />
+  <div class="conteneur cadre">
+    <div class="titres">
+      <p class="identite font-affiche">{nom}</p>
+      <p class="mot font-affiche" aria-hidden="true"><span class="haut">PORT</span><span class="bas">FOLIO</span></p>
+    </div>
+    <Image class="photo" src={portrait} alt={t('accueil.portraitAlt')} widths={[300, 460, 700]} sizes="(max-width: 719px) 70vw, 460px" loading="eager" fetchpriority="high" />
+    <div class="portes">
+      <a class="porte porte--code" href={localizedPath('code', lang)} transition:name="porte-code">
+        <span class="devise font-code">{t('accueil.melindesResout')}</span>
+        <span class="sous-titre">{sousTitreMelindes}</span>
+        <span class="appel">{t('accueil.voirCode')}</span>
+      </a>
+      <a class="porte porte--ecriture" href={localizedPath('ecriture', lang)} transition:name="porte-ecriture">
+        <span class="devise font-signature">{t('accueil.bindjeRaconte')}</span>
+        <span class="sous-titre">{sousTitreBindje}</span>
+        <span class="appel">{t('accueil.lireHistoires')}</span>
+      </a>
+    </div>
   </div>
-  <div class="portes">
-    <a class="porte porte--code" href={localizedPath('code', lang)}>
-      <span class="trait" aria-hidden="true"></span>
-      <span class="devise font-code">{t('accueil.melindesResout')}</span>
-      <span class="sous-titre">{sousTitreMelindes}</span>
-      <span class="appel">{t('accueil.voirCode')}</span>
-    </a>
-    <a class="porte porte--ecriture" href={localizedPath('ecriture', lang)}>
-      <span class="trait" aria-hidden="true"></span>
-      <span class="devise font-signature">{t('accueil.bindjeRaconte')}</span>
-      <span class="sous-titre">{sousTitreBindje}</span>
-      <span class="appel">{t('accueil.lireHistoires')}</span>
-    </a>
-  </div>
+  <Defilant mots={mots} variante="or" />
 </section>
 <script is:inline>
   (function () {
@@ -41,83 +41,63 @@ const t = useTranslations(lang);
 </script>
 
 <style>
-  .affiche { position: relative; isolation: isolate; min-height: min(88vh, 780px); display: grid; overflow: hidden; }
-  .scene, .portes { grid-area: 1 / 1; }
-
-  .scene { position: relative; overflow: hidden; }
-  .moitie { position: absolute; top: 0; bottom: 0; width: 50%; }
-  .moitie--code { left: 0; background: var(--paper); }
-  .moitie--ecriture { right: 0; background: var(--ink); }
-
-  .identite {
-    position: absolute; z-index: 1; top: 3%; left: 0; right: 0; margin: 0; display: flex; justify-content: center;
-    font-size: clamp(14px, 1.6vw, 22px); letter-spacing: .08em; text-transform: uppercase;
-    background: linear-gradient(90deg, var(--ink) 50%, var(--text-on-dark) 50%); -webkit-background-clip: text; background-clip: text; color: transparent;
+  .affiche {
+    position: relative; overflow: hidden; display: grid; grid-template-rows: 1fr auto;
+    min-height: min(88vh, 820px); color: var(--text-on-dark);
+    background: radial-gradient(ellipse at 72% 45%, #4a2410 0%, var(--ink) 62%);
   }
-  .mot {
-    position: absolute; z-index: 1; top: calc(3% + clamp(24px, 3vw, 40px)); left: 0; right: 0; margin: 0; display: flex;
-    font-size: clamp(64px, 15.5vw, 230px); line-height: .82; letter-spacing: .01em; pointer-events: none;
+  .cadre {
+    display: grid; align-items: end; column-gap: clamp(16px, 4vw, 56px);
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+    grid-template-areas: 'titres photo' 'portes photo';
+    padding-top: clamp(28px, 5vw, 64px);
   }
-  .mot .g { flex: 1; text-align: right; color: var(--ink); }
-  .mot .d { flex: 1; text-align: left; color: var(--gold-on-dark); }
-  .mot .t {
-    background: linear-gradient(90deg, var(--ink) 50%, var(--gold-on-dark) 50%);
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-  }
+  .titres { grid-area: titres; align-self: center; }
+  .identite { margin: 0 0 10px; font-size: clamp(13px, 1.3vw, 18px); letter-spacing: .14em; text-transform: uppercase; color: #c9b8a6; }
+  .mot { margin: 0; display: grid; font-size: clamp(96px, 15vw, 240px); line-height: .8; letter-spacing: .01em; }
+  .haut { color: var(--paper); }
+  .bas { color: var(--gold-on-dark); }
 
   .photo {
-    position: absolute; z-index: 2; left: 50%; bottom: 0; transform: translateX(-50%);
-    height: 84%; width: auto; max-width: none; pointer-events: none;
-    filter: drop-shadow(0 18px 30px rgb(0 0 0 / .35));
+    grid-area: photo; justify-self: center; align-self: end; width: auto; max-width: 100%;
+    height: min(78vh, 700px); object-fit: contain; object-position: bottom;
+    filter: drop-shadow(0 24px 40px rgb(0 0 0 / .55));
   }
 
-  .portes { position: relative; z-index: 3; display: flex; }
+  .portes { grid-area: portes; display: flex; flex-wrap: wrap; gap: 14px; padding: clamp(22px, 3vw, 36px) 0 clamp(28px, 4vw, 48px); }
   .porte {
-    flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: flex-end; gap: 6px;
-    padding: 0 clamp(16px, 3vw, 40px) 40px; text-decoration: none;
+    display: grid; gap: 2px; min-width: min(100%, 240px); padding: 14px 22px; border-radius: 18px; text-decoration: none;
+    transition: transform .3s var(--ease-sortie), box-shadow .3s var(--ease-sortie), background .3s ease;
   }
-  .porte--code { align-items: flex-start; color: var(--ink); --or: var(--gold-on-light); }
-  .porte--ecriture { align-items: flex-end; text-align: right; color: var(--text-on-dark); --or: var(--gold-on-dark); }
-  .porte:focus-visible { outline: 2px solid var(--or); outline-offset: -8px; }
-  .trait { width: 34px; height: 3px; background: var(--gold-on-dark); margin-bottom: 4px; }
-  .devise.font-code { font-size: clamp(16px, 1.6vw, 20px); }
-  .devise.font-signature { font-size: clamp(30px, 3vw, 40px); line-height: 1; }
-  .sous-titre { font-size: 13px; opacity: .75; }
-  .appel {
-    margin-top: 8px; font-size: 14px; padding: 8px 16px; border-radius: 999px; border: 1px solid var(--or); color: var(--or);
-    transition: background .25s ease, color .25s ease;
-  }
-  .porte:hover .appel { background: var(--or); color: var(--paper); }
-  .porte--ecriture:hover .appel { color: var(--ink); }
+  .porte:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgb(0 0 0 / .35); }
+  .porte--code { background: var(--paper); color: var(--ink); }
+  .porte--ecriture { border: 1px solid var(--gold-on-dark); color: var(--gold-on-dark); }
+  .porte--ecriture:hover { background: rgb(242 183 5 / .1); }
+  .porte:focus-visible { outline: 2px solid var(--gold-on-dark); outline-offset: 3px; }
+  .devise.font-code { font-size: 15px; }
+  .devise.font-signature { font-size: 30px; line-height: 1; }
+  .sous-titre { font-size: 12px; opacity: .75; }
+  .appel { margin-top: 4px; font-weight: 600; font-size: 15px; }
 
   /* — Entrée de l'affiche (≈ 2 s), une fois par visite — */
   .affiche[data-state='playing'] .identite { animation: apparait .5s ease .1s both; }
-  .affiche[data-state='playing'] .mot .g { animation: depuis-gauche .9s cubic-bezier(.2, .7, .2, 1) .1s both; }
-  .affiche[data-state='playing'] .mot .d { animation: depuis-droite .9s cubic-bezier(.2, .7, .2, 1) .1s both; }
-  .affiche[data-state='playing'] .mot .t { animation: apparait .5s ease .8s both; }
-  .affiche[data-state='playing'] .photo { animation: monte .9s cubic-bezier(.2, .7, .2, 1) .9s both; }
-  .affiche[data-state='playing'] .porte > * { animation: apparait .5s ease 1.5s both; }
+  .affiche[data-state='playing'] .haut { animation: depuis-gauche .8s var(--ease-sortie) .15s both; }
+  .affiche[data-state='playing'] .bas { animation: depuis-gauche .8s var(--ease-sortie) .35s both; }
+  .affiche[data-state='playing'] .photo { animation: monte 1s var(--ease-sortie) .5s both; }
+  .affiche[data-state='playing'] .porte { animation: apparait .5s ease 1.1s both; }
 
-  @keyframes depuis-gauche { from { transform: translateX(-60%); opacity: 0; } to { transform: none; opacity: 1; } }
-  @keyframes depuis-droite { from { transform: translateX(60%); opacity: 0; } to { transform: none; opacity: 1; } }
-  @keyframes apparait { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-  @keyframes monte { from { opacity: 0; transform: translate(-50%, 14%); } to { opacity: 1; transform: translateX(-50%); } }
+  @keyframes depuis-gauche { from { transform: translateX(-30%); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes apparait { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @keyframes monte { from { opacity: 0; transform: translateY(12%); } to { opacity: 1; transform: none; } }
 
-  /* Mobile : l'affiche en haut, les deux portes en dessous (côte à côte). */
+  /* Mobile : titre, puis photo, puis les deux portes empilées. */
   @media (max-width: 719px) {
-    .affiche { min-height: 0; grid-template-rows: auto auto; }
-    .scene { grid-area: 1 / 1; height: min(78vh, 560px); }
-    .portes { grid-area: 2 / 1; }
-    .identite { font-size: 11px; letter-spacing: .06em; }
-    .mot { top: calc(3% + 22px); font-size: clamp(48px, 17vw, 110px); }
-    .photo { height: 78%; }
-    .porte { padding: 22px 12px 26px; }
-    .devise.font-code { font-size: 14px; }
-    .devise.font-signature { font-size: 26px; }
-    .porte--code { background: var(--paper); }
-    .porte--ecriture { background: var(--ink); }
-    .sous-titre { font-size: 12px; }
-    .appel { font-size: 13px; padding: 7px 12px; }
+    .affiche { min-height: 0; }
+    .cadre { grid-template-columns: 1fr; grid-template-areas: 'titres' 'photo' 'portes'; padding-top: 24px; }
+    .mot { font-size: clamp(76px, 29vw, 150px); }
+    .photo { height: min(62vh, 480px); margin-top: -12px; }
+    .portes { flex-direction: column; padding-top: 18px; }
+    .porte { min-width: 0; }
   }
 </style>
 
