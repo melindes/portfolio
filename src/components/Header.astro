@@ -2,6 +2,9 @@
 import { localizedPath, useTranslations, type Lang } from '../lib/i18n';
 import SelecteurLangue from './SelecteurLangue.astro';
 import BoutonTheme from './BoutonTheme.astro';
+import { Image } from 'astro:assets';
+import icone from '../assets/melindes/icone.png';
+import monogramme from '../assets/melindes/monogramme.png';
 
 export type Univers = 'code' | 'ecriture' | 'neutre';
 interface Props { lang: Lang; univers: Univers }
@@ -12,6 +15,12 @@ const accueil = localizedPath('home', lang);
 <header class="entete">
   <div class="conteneur barre">
     <a class="logo" href={accueil}>
+      {univers === 'code' && (
+        <span class="marque" aria-hidden="true">
+          <Image class="marque--clair" src={icone} alt="" widths={[32, 64]} sizes="32px" />
+          <Image class="marque--sombre" src={monogramme} alt="" widths={[32, 64]} sizes="32px" />
+        </span>
+      )}
       <span class="font-affiche">PORTFOLIO</span><span class="point" aria-hidden="true">.</span>
       <span class="sr-only">— {t('nav.accueil')}</span>
     </a>
@@ -35,6 +44,11 @@ const accueil = localizedPath('home', lang);
   .barre { display: flex; align-items: center; gap: 8px 24px; padding-block: 12px; }
   .logo { display: inline-flex; align-items: baseline; color: var(--fg); text-decoration: none; font-size: 26px; letter-spacing: .02em; line-height: 1; }
   .point { color: var(--accent); }
+  /* Côté Code : l'icône M de Melindes (tuile noire en clair, monogramme seul sur fond sombre). */
+  .marque { align-self: center; display: inline-flex; margin-right: 10px; }
+  .marque img { width: 32px; height: 32px; border-radius: 8px; }
+  .marque .marque--sombre, :global([data-theme='sombre']) .marque .marque--clair { display: none; }
+  :global([data-theme='sombre']) .marque .marque--sombre { display: block; }
   nav { display: flex; gap: 4px 22px; margin-left: auto; }
   nav a { position: relative; color: var(--muted); text-decoration: none; font-size: 14px; padding: 6px 2px; transition: color .2s ease; }
   nav a::after {

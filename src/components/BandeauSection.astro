@@ -1,6 +1,8 @@
 ---
 // En-tête « affiche » d'une section : c'est lui que la moitié cliquée de l'accueil « devient »
 // (même transition:name que la porte correspondante).
+import { Image } from 'astro:assets';
+import icone from '../assets/melindes/icone.png';
 interface Props { univers: 'code' | 'ecriture'; numero: string; titre: string; intro?: string }
 const { univers, numero, titre, intro } = Astro.props;
 const lettres = [...titre];
@@ -11,6 +13,7 @@ const lettres = [...titre];
     <h1 class="font-affiche" aria-label={titre}>
       {lettres.map((l, i) => <span class="lettre" aria-hidden="true" style={`--i: ${i}`}>{l}</span>)}
     </h1>
+    {univers === 'code' && <Image class="sceau" src={icone} alt="" widths={[120, 240, 360]} sizes="(max-width: 719px) 72px, 180px" loading="eager" />}
     {univers === 'ecriture' && <p class="signature font-signature" aria-hidden="true">Bindjé</p>}
     {intro && <p class="intro">{intro}</p>}
   </div>
@@ -20,6 +23,13 @@ const lettres = [...titre];
   .bandeau-section { position: relative; overflow: hidden; padding-block: clamp(36px, 6vw, 72px) clamp(28px, 4vw, 48px); }
   .bandeau--code { background: var(--paper); color: var(--ink); }
   .bandeau--ecriture { background: radial-gradient(ellipse at 75% 20%, var(--brun), var(--ink) 70%); color: var(--text-on-dark); }
+  .bandeau-section .conteneur { position: relative; }
+  /* Sceau « Melindes développeur » : l'icône M posée comme un tampon à droite du titre. */
+  .sceau {
+    position: absolute; top: 0; right: 0; width: clamp(72px, 14vw, 180px); height: auto;
+    border-radius: 22%; box-shadow: 0 18px 36px rgb(20 17 15 / .28);
+    transform: rotate(6deg); animation: sceau-pose .8s var(--ease-sortie) .35s both;
+  }
   .numero { margin: 0 0 6px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
   h1 {
     margin: 0; padding-top: .12em; font-weight: 400; line-height: .82; letter-spacing: .01em;
@@ -29,5 +39,6 @@ const lettres = [...titre];
   .lettre { display: inline-block; animation: lettre-monte .7s var(--ease-sortie) both; animation-delay: calc(var(--i) * 60ms); }
   .signature { margin: 4px 0 0; font-size: clamp(34px, 4vw, 52px); line-height: 1; }
   .intro { margin: 18px 0 0; max-width: 620px; font-size: 17px; opacity: .85; }
+  @keyframes sceau-pose { from { transform: rotate(-14deg) scale(.6); opacity: 0; } to { transform: rotate(6deg); opacity: 1; } }
   @keyframes lettre-monte { from { transform: translateY(40%); opacity: 0; } to { transform: none; opacity: 1; } }
 </style>
