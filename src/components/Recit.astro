@@ -15,11 +15,12 @@ const parties = (await getLocalized('romans', 'les-larmes-du-present', 'fr'))?.e
 const ecrits = parties.reduce((s, p) => s + p.chapitres_ecrits, 0);
 const total = parties.reduce((s, p) => s + p.chapitres_total, 0);
 const capture = myLife?.fonctionnalites[0]?.capture;
+const code = t('code.titreAffiche');
 ---
 <section class="recit conteneur">
   <div class="col col--code" data-reveal>
     <p class="numero font-code">01 — {t('accueil.melindesResout').replace(/\.$/, '')}</p>
-    <p class="univers font-affiche" aria-hidden="true">{t('code.titreAffiche')}</p>
+    <p class="univers font-affiche" aria-hidden="true">{code.slice(0, -1)}<span class="derniere">{code.slice(-1)}</span></p>
     <h2>{t('accueil.codeTitre')}</h2>
     <p class="texte">{t('accueil.codeTexte')}</p>
     {myLife && (
@@ -58,7 +59,10 @@ const capture = myLife?.fonctionnalites[0]?.capture;
     position: relative; overflow: hidden; display: grid; align-content: start; gap: 10px;
     padding: clamp(24px, 3.5vw, 44px); border-radius: var(--radius);
   }
-  .col--code { background: var(--paper); color: var(--ink); border: 1px solid #e2d8c8; --or: var(--gold-on-light); }
+  .col--code { background: var(--code-blanc); color: var(--code-noir); border: 1px solid #e5e5e5; --or: var(--code-orange-texte); }
+  .col--code .univers, .col--code h2 { font-family: var(--police-code); font-weight: 800; }
+  .col--code .univers::after { content: ''; display: block; width: 48px; height: 4px; margin-top: 14px; background: var(--code-orange); }
+  .derniere { color: var(--code-orange); }
   .col--ecriture { background: radial-gradient(ellipse at 80% 10%, var(--brun), var(--ink) 75%); color: var(--text-on-dark); --or: var(--gold-on-dark); }
   .numero { margin: 0; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--or); }
   .univers { margin: 0; padding-top: .12em; font-size: clamp(56px, 8vw, 110px); line-height: .85; letter-spacing: .01em; }

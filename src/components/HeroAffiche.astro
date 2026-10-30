@@ -18,7 +18,7 @@ const mots = t('accueil.defilant').split(' ✦ ');
     <Image class="photo" src={portrait} alt={t('accueil.portraitAlt')} widths={[300, 460, 700]} sizes="(max-width: 719px) 70vw, 460px" loading="eager" fetchpriority="high" />
     <div class="portes">
       <a class="porte porte--code" href={localizedPath('code', lang)} transition:name="porte-code">
-        <span class="devise font-code">{t('accueil.melindesResout')}</span>
+        <span class="devise devise--code">{t('accueil.melindesResout')}</span>
         <span class="sous-titre">{sousTitreMelindes}</span>
         <span class="appel">{t('accueil.voirCode')}</span>
       </a>
@@ -70,11 +70,12 @@ const mots = t('accueil.defilant').split(' ✦ ');
     transition: transform .3s var(--ease-sortie), box-shadow .3s var(--ease-sortie), background .3s ease;
   }
   .porte:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgb(0 0 0 / .35); }
-  .porte--code { background: var(--paper); color: var(--ink); }
+  .porte--code { background: var(--code-blanc); color: var(--code-noir); }
+  .porte--code .appel { color: var(--code-orange-texte); }
   .porte--ecriture { border: 1px solid var(--gold-on-dark); color: var(--gold-on-dark); }
   .porte--ecriture:hover { background: rgb(242 183 5 / .1); }
   .porte:focus-visible { outline: 2px solid var(--gold-on-dark); outline-offset: 3px; }
-  .devise.font-code { font-size: 15px; }
+  .devise--code { font: 800 20px/1.1 var(--police-code); }
   .devise.font-signature { font-size: 30px; line-height: 1; }
   .sous-titre { font-size: 12px; opacity: .75; }
   .appel { margin-top: 4px; font-weight: 600; font-size: 15px; }

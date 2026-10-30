@@ -6,22 +6,56 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 ---
 <footer class="pied">
-  <div class="conteneur ligne">
-    <p class="font-titre">{t('footer.texte')}</p>
-    <p class="liens">
-      <a href={localizedPath('code', lang)}>{t('nav.code')}</a>
-      <a href={localizedPath('ecriture', lang)}>{t('nav.ecriture')}</a>
+  <div class="conteneur">
+    <div class="colonnes">
+      <a class="colonne colonne--code" href={localizedPath('code', lang)}>
+        <span class="nom">Melindes</span>
+        <span class="role">{t('footer.code')}</span>
+        <span class="lien">{t('nav.code')} →</span>
+      </a>
+      <a class="colonne colonne--ecriture" href={localizedPath('ecriture', lang)}>
+        <span class="nom font-signature">Bindjé</span>
+        <span class="role">{t('footer.ecriture')}</span>
+        <span class="lien">{t('nav.ecriture')} →</span>
+      </a>
+    </div>
+    <div class="ligne">
+      <p class="font-titre">{t('footer.texte')}</p>
       <a href={localizedPath('contact', lang)}>{t('nav.contact')}</a>
-    </p>
-    <p class="copy">© {new Date().getFullYear()} Mandah Célestin Wilfried Bindjé</p>
+      <p class="copy">© {new Date().getFullYear()} Mandah Célestin Wilfried Bindjé</p>
+    </div>
   </div>
 </footer>
 
 <style>
-  .pied { border-top: 1px solid var(--border); margin-top: 64px; padding-block: 24px; color: var(--muted); font-size: 14px; }
-  .ligne { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline; justify-content: space-between; }
+  /* Bandeau sombre commun aux deux univers ; chaque colonne garde sa couleur. */
+  .pied {
+    margin-top: 64px; padding-block: clamp(32px, 5vw, 56px) 24px; font-size: 14px;
+    background: #0d0b0a; color: #f5efe4; border-top: 1px solid rgb(255 255 255 / .08);
+  }
+  /* Collé au bandeau sombre qui termine l'accueil : pas de vide entre les deux. */
+  :global(main:has(> .rejoindre-bandeau:last-child)) + .pied { margin-top: 0; }
+  .colonnes { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .colonne {
+    display: grid; gap: 4px; align-content: start; padding: 20px 22px; border-radius: var(--radius);
+    border: 1px solid rgb(255 255 255 / .1); color: inherit; text-decoration: none;
+    transition: transform .25s var(--ease-sortie), border-color .25s ease;
+  }
+  .colonne:hover { transform: translateY(-3px); }
+  .colonne--code:hover { border-color: var(--code-orange); }
+  .colonne--ecriture:hover { border-color: var(--ecriture-or); }
+  .colonne--code .nom { font: 800 30px/1.1 var(--police-code); text-transform: uppercase; }
+  .colonne--ecriture .nom { font-size: 40px; line-height: 1; color: var(--ecriture-or); }
+  .role { opacity: .7; }
+  .lien { margin-top: 8px; font-weight: 600; }
+  .colonne--code .lien { color: var(--code-orange); }
+  .colonne--ecriture .lien { color: var(--ecriture-or); }
+  .ligne {
+    display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline; justify-content: space-between;
+    margin-top: 28px; padding-top: 18px; border-top: 1px solid rgb(255 255 255 / .08); color: #b3a89a;
+  }
   .ligne p { margin: 0; }
-  .font-titre { font-size: 19px; font-style: italic; color: var(--fg); }
-  .liens { display: flex; gap: 16px; flex-wrap: wrap; }
-  .liens a { color: var(--muted); }
+  .ligne a { color: #f5efe4; }
+  .font-titre { font-size: 19px; font-style: italic; color: #f5efe4; }
+  @media (max-width: 719px) { .colonnes { grid-template-columns: 1fr; } }
 </style>

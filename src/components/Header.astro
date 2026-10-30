@@ -12,7 +12,7 @@ const accueil = localizedPath('home', lang);
 <header class="entete">
   <div class="conteneur barre">
     <a class="logo" href={accueil}>
-      <span class="font-affiche">PORTFOLIO</span><span class="point" aria-hidden="true">.</span>
+      <span class="mot-logo">PORTFOLIO</span><span class="point" aria-hidden="true">.</span>
       <span class="sr-only">— {t('nav.accueil')}</span>
     </a>
     <nav id="nav-principale" aria-label="Navigation principale">
@@ -34,6 +34,7 @@ const accueil = localizedPath('home', lang);
   .entete { position: relative; z-index: 20; border-bottom: 1px solid var(--border); background: var(--bg); }
   .barre { display: flex; align-items: center; gap: 8px 24px; padding-block: 12px; }
   .logo { display: inline-flex; align-items: baseline; color: var(--fg); text-decoration: none; font-size: 26px; letter-spacing: .02em; line-height: 1; }
+  .mot-logo { font-family: Anton, Impact, 'Arial Narrow', sans-serif; }
   .point { color: var(--accent); }
   nav { display: flex; gap: 4px 22px; margin-left: auto; }
   nav a { position: relative; color: var(--muted); text-decoration: none; font-size: 14px; padding: 6px 2px; transition: color .2s ease; }
