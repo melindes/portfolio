@@ -12,17 +12,24 @@
   --ease-sortie: cubic-bezier(.2, .7, .2, 1);
   --police-affiche: Anton, Impact, 'Arial Narrow', sans-serif;
   --poids-affiche: 400;
+  /* Identités des deux univers, fixes quel que soit l'univers de la page (accueil, contact, pied de page). */
+  --code-noir: #0a0a0a;
+  --code-blanc: #ffffff;
+  --code-orange: #e4572e;
+  --code-orange-texte: #c2410c; /* orange assombri : contraste AA sur blanc */
+  --police-code: Jost, 'Futura', 'Century Gothic', sans-serif;
+  --ecriture-or: #f2b705;
 }
 
 /* Univers Code = Melindes développeur : noir, blanc et orange de l'icône M, police géométrique (Jost). */
 :root[data-univers='code'] {
-  --paper: #ffffff;
-  --ink: #0a0a0a;
-  --text-on-dark: #ffffff;
-  --orange: #e4572e;
-  --gold-on-dark: var(--orange);
-  --gold-on-light: #c2410c; /* orange assombri : contraste AA sur blanc */
-  --police-affiche: Jost, 'Futura', 'Century Gothic', sans-serif;
+  --paper: var(--code-blanc);
+  --ink: var(--code-noir);
+  --text-on-dark: var(--code-blanc);
+  --orange: var(--code-orange);
+  --gold-on-dark: var(--code-orange);
+  --gold-on-light: var(--code-orange-texte);
+  --police-affiche: var(--police-code);
   --poids-affiche: 800;
 }
 
