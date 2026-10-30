@@ -10,6 +10,20 @@
   --max: 1200px;
   --ease-porte: cubic-bezier(.7, 0, .2, 1);
   --ease-sortie: cubic-bezier(.2, .7, .2, 1);
+  --police-affiche: Anton, Impact, 'Arial Narrow', sans-serif;
+  --poids-affiche: 400;
+}
+
+/* Univers Code = Melindes développeur : noir, blanc et orange de l'icône M, police géométrique (Jost). */
+:root[data-univers='code'] {
+  --paper: #ffffff;
+  --ink: #0a0a0a;
+  --text-on-dark: #ffffff;
+  --orange: #e4572e;
+  --gold-on-dark: var(--orange);
+  --gold-on-light: #c2410c; /* orange assombri : contraste AA sur blanc */
+  --police-affiche: Jost, 'Futura', 'Century Gothic', sans-serif;
+  --poids-affiche: 800;
 }
 
 /* Jetons qui suivent le mode choisi. */
@@ -32,3 +46,6 @@
   --surface: #1d1916;
   color-scheme: dark;
 }
+
+:root[data-univers='code'][data-theme='clair'] { --muted: #525252; --border: #e5e5e5; --surface: #f6f6f6; }
+:root[data-univers='code'][data-theme='sombre'] { --muted: #a3a3a3; --border: #262626; --surface: #161616; }

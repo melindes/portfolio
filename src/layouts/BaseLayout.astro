@@ -30,7 +30,7 @@ const ailleurs = alternatePath(ici);
 const absolu = (chemin: string) => (Astro.site ? new URL(chemin, Astro.site).href : chemin);
 ---
 <!doctype html>
-<html lang={lang} data-theme={themeDefaut} data-theme-defaut={themeDefaut} data-split={theme === 'split' ? '' : undefined}>
+<html lang={lang} data-theme={themeDefaut} data-theme-defaut={themeDefaut} data-univers={univers} data-split={theme === 'split' ? '' : undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

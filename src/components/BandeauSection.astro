@@ -3,17 +3,27 @@
 // (même transition:name que la porte correspondante).
 import { Image } from 'astro:assets';
 import icone from '../assets/melindes/icone.png';
+import monogramme from '../assets/melindes/monogramme.png';
+import monogrammeNoir from '../assets/melindes/monogramme-noir.png';
 interface Props { univers: 'code' | 'ecriture'; numero: string; titre: string; intro?: string }
 const { univers, numero, titre, intro } = Astro.props;
 const lettres = [...titre];
 ---
 <header class={`bandeau-section bandeau--${univers}`} transition:name={`porte-${univers}`}>
   <div class="conteneur">
-    <p class="numero font-code">{numero}</p>
+    <p class="numero font-code">
+      {univers === 'code' && <Image class="icone" src={icone} alt="" widths={[28, 56]} sizes="28px" />}
+      {numero}
+    </p>
     <h1 class="font-affiche" aria-label={titre}>
       {lettres.map((l, i) => <span class="lettre" aria-hidden="true" style={`--i: ${i}`}>{l}</span>)}
     </h1>
-    {univers === 'code' && <Image class="sceau" src={icone} alt="" widths={[120, 240, 360]} sizes="(max-width: 719px) 72px, 180px" loading="eager" />}
+    {univers === 'code' && (
+      <span class="grand-m" aria-hidden="true">
+        <Image class="grand-m--clair" src={monogrammeNoir} alt="" widths={[240, 480, 720]} sizes="(max-width: 719px) 96px, 360px" loading="eager" />
+        <Image class="grand-m--sombre" src={monogramme} alt="" widths={[240, 480, 720]} sizes="(max-width: 719px) 96px, 360px" loading="eager" />
+      </span>
+    )}
     {univers === 'ecriture' && <p class="signature font-signature" aria-hidden="true">Bindjé</p>}
     {intro && <p class="intro">{intro}</p>}
   </div>
@@ -21,24 +31,33 @@ const lettres = [...titre];
 
 <style>
   .bandeau-section { position: relative; overflow: hidden; padding-block: clamp(36px, 6vw, 72px) clamp(28px, 4vw, 48px); }
-  .bandeau--code { background: var(--paper); color: var(--ink); }
+  /* Suit le mode : blanc + texte noir en clair, noir + texte blanc en sombre. */
+  .bandeau--code { background: var(--bg); color: var(--fg); border-bottom: 1px solid var(--border); }
+  .bandeau--code h1 .lettre:last-child { color: var(--orange); }
   .bandeau--ecriture { background: radial-gradient(ellipse at 75% 20%, var(--brun), var(--ink) 70%); color: var(--text-on-dark); }
   .bandeau-section .conteneur { position: relative; }
-  /* Sceau « Melindes développeur » : l'icône M posée comme un tampon à droite du titre. */
-  .sceau {
-    position: absolute; top: 0; right: 0; width: clamp(72px, 14vw, 180px); height: auto;
-    border-radius: 22%; box-shadow: 0 18px 36px rgb(20 17 15 / .28);
-    transform: rotate(6deg); animation: sceau-pose .8s var(--ease-sortie) .35s both;
+  /* Le grand M de Melindes développeur, à droite du titre (noir en clair, blanc en sombre). */
+  .grand-m {
+    position: absolute; top: 50%; right: -2%; width: clamp(120px, 30vw, 360px); height: auto;
+    translate: 0 -50%; animation: grand-m-pose .9s var(--ease-sortie) .3s both;
   }
+  .grand-m img { width: 100%; }
+  .grand-m--sombre, :global([data-theme='sombre']) .grand-m--clair { display: none; }
+  :global([data-theme='sombre']) .grand-m--sombre { display: block; }
+  /* L'icône en signature devant « 01 — Melindes résout ». */
+  .numero:has(.icone) { display: flex; align-items: center; gap: 10px; opacity: 1; }
+  .icone { width: 28px; height: 28px; border-radius: 7px; }
+  :global([data-theme='sombre']) .icone { box-shadow: 0 0 0 1px var(--border); }
   .numero { margin: 0 0 6px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
   h1 {
-    margin: 0; padding-top: .12em; font-weight: 400; line-height: .82; letter-spacing: .01em;
+    margin: 0; padding-top: .12em; line-height: .82; letter-spacing: .01em;
     font-size: clamp(72px, 16vw, 220px); overflow-wrap: anywhere;
   }
   .bandeau--ecriture h1 { color: var(--gold-on-dark); }
   .lettre { display: inline-block; animation: lettre-monte .7s var(--ease-sortie) both; animation-delay: calc(var(--i) * 60ms); }
   .signature { margin: 4px 0 0; font-size: clamp(34px, 4vw, 52px); line-height: 1; }
   .intro { margin: 18px 0 0; max-width: 620px; font-size: 17px; opacity: .85; }
-  @keyframes sceau-pose { from { transform: rotate(-14deg) scale(.6); opacity: 0; } to { transform: rotate(6deg); opacity: 1; } }
+  @media (max-width: 719px) { .grand-m { top: 8px; right: 0; width: 96px; translate: none; } }
+  @keyframes grand-m-pose { from { transform: translateY(18%) scale(.9); opacity: 0; } to { transform: none; opacity: 1; } }
   @keyframes lettre-monte { from { transform: translateY(40%); opacity: 0; } to { transform: none; opacity: 1; } }
 </style>
