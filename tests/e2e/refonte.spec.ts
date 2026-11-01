@@ -76,3 +76,9 @@ test('le titre d’un roman n’est coupé que devant un vrai sous-titre', async
   await expect(pokou.locator('.sous')).toHaveText('héroïne malgré elle');
 });
 
+test('un roman à venir avec couverture l’affiche sur sa carte', async ({ page }) => {
+  await page.goto('/fr/ecriture');
+  await expect(page.locator('.carte-roman').filter({ hasText: 'Pokou' }).locator('img.visuel')).toBeVisible();
+  await expect(page.locator('.carte-roman').filter({ hasText: 'Toi' }).locator('img')).toHaveCount(0);
+});
+

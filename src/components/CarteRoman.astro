@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import { localizedPath, useTranslations, type Lang } from '../lib/i18n';
 import { slugOf } from '../lib/content';
@@ -12,14 +13,17 @@ const d = entry.data;
 const coupe = d.titre.match(/^([^,]+),\s*(\p{Ll}.*)$/u);
 const principal = coupe ? coupe[1] : d.titre;
 const sousTitre = coupe ? coupe[2] : '';
+// Avec une vraie couverture, l'image porte déjà titre et signature : le titre reste pour les lecteurs d'écran.
+const avecCouverture = Boolean(d.couverture);
 ---
-<a class="carte-roman" href={localizedPath('roman', lang, slugOf(entry.id))} data-reveal style={`--teinte: ${teinte}`}>
+<a class:list={['carte-roman', { 'carte-roman--couverture': avecCouverture }]} href={localizedPath('roman', lang, slugOf(entry.id))} data-reveal style={`--teinte: ${teinte}`}>
+  {d.couverture && <Image class="visuel" src={d.couverture} alt="" widths={[240, 480]} sizes="(max-width: 719px) 45vw, 240px" />}
   <span class="etat">{t('roman.aVenir')}</span>
-  <span class="titre">
+  <span class:list={['titre', { 'sr-only': avecCouverture }]}>
     <span class="principal font-affiche">{principal.trim()}</span>
     {sousTitre && <span class="sous font-titre">{sousTitre}</span>}
   </span>
-  <span class="auteur font-signature" aria-hidden="true">Bindjé</span>
+  {!avecCouverture && <span class="auteur font-signature" aria-hidden="true">Bindjé</span>}
 </a>
 
 <style>
@@ -36,4 +40,6 @@ const sousTitre = coupe ? coupe[2] : '';
   .principal { font-size: clamp(32px, 3.6vw, 46px); line-height: .92; text-transform: uppercase; letter-spacing: .01em; }
   .sous { font-style: italic; font-size: 20px; opacity: .9; }
   .auteur { font-size: 30px; color: var(--gold-on-dark); align-self: flex-end; }
+  .visuel { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .carte-roman--couverture .etat { position: relative; align-self: flex-start; margin-top: auto; padding: 3px 9px; border-radius: 10px; background: rgb(0 0 0 / .6); opacity: 1; }
 </style>
