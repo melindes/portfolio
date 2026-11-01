@@ -34,10 +34,20 @@ test('les trois livres affichent leur encre (reduced-motion)', async ({ browser 
 });
 
 test('roman à venir sans pitch : titre et badge seulement', async ({ page }) => {
+  await page.goto('/fr/ecriture/toi-moi-nous');
+  await expect(page.locator('h1')).toHaveText('Toi, Moi, Nous !');
+  await expect(page.getByText('○ À venir', { exact: true })).toBeVisible();
+  await expect(page.locator('.resume')).toHaveCount(0);
+  await expect(page.locator('.couverture')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Être prévenu' })).toHaveAttribute('href', '/fr/contact?motif=soutien&oeuvre=toi-moi-nous');
+});
+
+test('roman à venir avec couverture et résumé', async ({ page }) => {
   await page.goto('/fr/ecriture/pokou');
   await expect(page.locator('h1')).toHaveText('Pokou, héroïne malgré elle');
   await expect(page.getByText('○ À venir', { exact: true })).toBeVisible();
-  await expect(page.locator('.resume')).toHaveCount(0);
+  await expect(page.locator('img.couverture')).toBeVisible();
+  await expect(page.locator('.resume')).toContainText('réincarnation de la légendaire reine Pokou');
   await expect(page.getByRole('link', { name: 'Être prévenu' })).toHaveAttribute('href', '/fr/contact?motif=soutien&oeuvre=pokou');
 });
 
